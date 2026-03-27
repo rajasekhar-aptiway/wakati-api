@@ -26,7 +26,7 @@ public interface OtpChallengeRepository extends JpaRepository<OtpChallenge,Long>
 
     @Query("""
         SELECT o FROM OtpChallenge o
-        WHERE o.userId = :userId
+        WHERE o.user.userId = :userId
         ORDER BY o.createdAt DESC
     """)
     List<OtpChallenge> findLatestOtp(@Param("userId") String userId, Pageable pageable);
