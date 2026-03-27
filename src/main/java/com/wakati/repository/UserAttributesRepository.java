@@ -1,6 +1,8 @@
 package com.wakati.repository;
 
 import com.wakati.entity.UserAttributes;
+import com.wakati.enums.UserType;
+import com.wakati.model.response.UserWithExpiryProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +29,20 @@ public interface UserAttributesRepository extends JpaRepository<UserAttributes, 
         AND u.status <> 'REJECTED'
     """)
     long countByIdNumber(@Param("idNumber") String idNumber);
+
+    @Query("""
+    SELECT
+        ua.user.userId AS userId,
+        ua.user.userType AS userType,
+        ua.user.fullName As fullName,
+        ua.attributeValue AS idExpiry
+
+    FROM UserAttributes ua
+
+    WHERE ua.attributeKey = 'Idexpiry'
+    AND ua.user.userType = UserType.CUSTOMER
+
+    ORDER BY ua.createdAt DESC
+""")
+    List<UserWithExpiryProjection> findAllCustomersWithIdExpiry();
 }
