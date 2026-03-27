@@ -1,11 +1,14 @@
 package com.wakati.service;
 
+import com.wakati.I18NConstants;
 import com.wakati.entity.OtpChallenge;
 import com.wakati.entity.User;
 import com.wakati.entity.UserAttributes;
 import com.wakati.entity.Wallet;
 import com.wakati.enums.*;
+import com.wakati.exception.WakatiException;
 import com.wakati.model.request.UserRegistrationRequest;
+import com.wakati.model.response.ResponseBuilder;
 import com.wakati.repository.OtpChallengeRepository;
 import com.wakati.repository.UserAttributesRepository;
 import com.wakati.repository.UserRepository;
@@ -31,6 +34,9 @@ public class UserRegistrationService {
     @Autowired
     private WalletRepository walletRepository;
 
+    @Autowired
+    private ResponseBuilder responseBuilder;
+
     @Transactional
     public Map<String, Object> register(UserRegistrationRequest request) {
 
@@ -38,21 +44,21 @@ public class UserRegistrationService {
         userRepository.findTopByMobileNoAndStatusNotOrderByCreatedAtDesc(
                 request.getMobileNo(), Status.REJECTED
         ).ifPresent(u -> {
-            throw new RuntimeException("Mobile already registered");
+            throw new WakatiException(I18NConstants.MOBILE_ALREADY_REGISTERED);
         });
 
         // ✅ 2. Duplicate Email Check
         userRepository.findTopByEmailAndStatusNotOrderByCreatedAtDesc(
                 request.getEmail(), Status.REJECTED
         ).ifPresent(u -> {
-            throw new RuntimeException("Email already registered");
+            throw new WakatiException(I18NConstants.EMAIL_ALREADY_REGISTERED);
         });
 
         // ✅ 3. ID number check
         if (request.getIdNumber() != null) {
             long count = attributesRepository.countByIdNumber(request.getIdNumber());
             if (count >= 2) {
-                throw new RuntimeException("ID number already used by 2 users");
+                throw new WakatiException(I18NConstants.ID_NUMBER_ALREADY_USED_BY_2_USERS);
             }
         }
 
@@ -120,15 +126,11 @@ public class UserRegistrationService {
 
         walletRepository.save(wallet);
 
-        // ✅ Response
-        return Map.of(
-                "code", 200,
-                "message", "User registered successfully",
-                "data", Map.of(
-                        "userId", userId,
-                        "mobile", request.getMobileNo(),
-                        "email", request.getEmail()
-                )
-        );
+       return responseBuilder.success(I18NConstants.USER_REGISTERED_SUCCESSFULLY,"data", Map.of(
+                "userId", userId,
+                "mobile", request.getMobileNo(),
+                "email", request.getEmail()
+        ));
+
     }
 }

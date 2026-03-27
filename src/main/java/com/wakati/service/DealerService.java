@@ -1,12 +1,16 @@
 package com.wakati.service;
 
+import com.wakati.I18NConstants;
 import com.wakati.enums.Status;
+import com.wakati.exception.WakatiException;
 import com.wakati.model.request.DealerRequest;
+import com.wakati.model.response.ResponseBuilder;
 import com.wakati.model.response.UserBasicProjection;
 import com.wakati.model.response.UserProjection;
 import com.wakati.model.response.UserResponse;
 import com.wakati.repository.DealerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,6 +21,9 @@ public class DealerService {
     @Autowired
     private DealerRepository dealerRepository;
 
+    @Autowired
+    private ResponseBuilder responseBuilder;
+
 
     public Map<String, Object> getDealers(DealerRequest request) {
 
@@ -26,19 +33,13 @@ public class DealerService {
 
         // ✅ VALIDATION
         if (!"web".equalsIgnoreCase(platform) && userId == null) {
-            throw new RuntimeException("user_id is required");
+            throw new WakatiException(I18NConstants.USER_ID_REQUIRED);
         }
 
         String status = mapStatus(statusParam);
-
-        // =====================================================
-        // ✅ WEB FLOW
-        // =====================================================
         if ("web".equalsIgnoreCase(platform)) {
 
             List<UserProjection> rows = dealerRepository.fetchWebDealers(status);
-
-
             Map<Status, Long> counts = new EnumMap<>(Status.class);
 
             for (Object[] row : dealerRepository.countByStatusGrouped()) {
@@ -52,9 +53,7 @@ public class DealerService {
             Map<String, UserResponse> map = new LinkedHashMap<>();
 
             for (UserProjection row : rows) {
-
                 map.putIfAbsent(row.getUserId(), buildDealer(row));
-
                 UserResponse dealer = map.get(row.getUserId());
 
                 if (row.getAttributeKey() != null) {
@@ -66,26 +65,20 @@ public class DealerService {
                 }
             }
 
-            return Map.of(
-                    "code", 200,
-                    "message", "Dealer list fetched successfully",
-                    "data", Map.of(
-                            "pendingcount", pending,
-                            "approvedcount", approved,
-                            "rejectedcount", rejected,
-                            "content", map.values()
-                    )
-            );
+            return responseBuilder.success(I18NConstants.DEALER_LIST_FETCHED_SUCCESSFULLY,"data",Map.of(
+                    "pendingcount", pending,
+                    "approvedcount", approved,
+                    "rejectedcount", rejected,
+                    "content", map.values()
+            ));
         }
 
-        // =====================================================
-        // ✅ MOBILE FLOW
-        // =====================================================
+       //Mobile flow
 
         UserBasicProjection user = dealerRepository.getUserBasic(userId);
 
         if (user == null) {
-            throw new RuntimeException("User not found");
+            throw new WakatiException(HttpStatus.NO_CONTENT,I18NConstants.USER_NOT_FOUND);
         }
 
         String role = user.getUserType();
@@ -94,35 +87,23 @@ public class DealerService {
         List<Map<String, Object>> data;
 
         if ("RECEIVER".equalsIgnoreCase(role)) {
-
             data = dealerRepository.fetchReceiverDealers(island);
-
         } else if ("PARTNER_AGENT".equalsIgnoreCase(role)) {
-
             data = dealerRepository.fetchPartnerAgentDealers(island);
-
         } else if ("SUPER_DEALER".equalsIgnoreCase(role)) {
-
             String subCategory = dealerRepository.getSubCategory(userId);
-
             if (subCategory == null) {
-                throw new RuntimeException("Super dealer sub-category not found");
+                throw new WakatiException(HttpStatus.NO_CONTENT,I18NConstants.SUPER_DEALER_SUB_CATEGORY_NOT_FOUND);
             }
-
             data = dealerRepository.fetchSuperDealerDealers(userId, subCategory);
 
         } else {
             data = List.of();
         }
-
-        return Map.of(
-                "code", 200,
-                "message", "Dealer list fetched successfully",
-                "data", Map.of(
-                        "count", data.size(),
-                        "content", data
-                )
-        );
+        return responseBuilder.success(I18NConstants.DEALER_LIST_FETCHED_SUCCESSFULLY,"data",Map.of(
+                "count", data.size(),
+                "content", data
+        ));
     }
 
     private String mapStatus(String status) {

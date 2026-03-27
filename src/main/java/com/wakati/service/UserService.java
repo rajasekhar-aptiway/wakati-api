@@ -1,7 +1,9 @@
 package com.wakati.service;
 
+import com.wakati.I18NConstants;
 import com.wakati.enums.Status;
 import com.wakati.enums.UserType;
+import com.wakati.model.response.ResponseBuilder;
 import com.wakati.model.response.UserProjection;
 import com.wakati.model.response.UserResponse;
 import com.wakati.repository.UserRepository;
@@ -17,6 +19,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 //    private final JwtService jwtService; // you must implement this
+
+    @Autowired
+    private ResponseBuilder responseBuilder;
 
     public Map<String, Object> getUsers(Status status, List<UserType> type) {
 
@@ -72,16 +77,13 @@ public class UserService {
             }
         }
 
-        return Map.of(
-                "code", 200,
-                "message", "Customer list fetched successfully",
-                "data", Map.of(
-                        "pendingcount", pending,
-                        "approvedcount", approved,
-                        "rejectedcount", rejected,
-                        "content", usersMap.values()
-                )
-        );
+
+        return responseBuilder.success(I18NConstants.CUSTOMER_LIST_FETCHED_SUCCESSFULLY, "data", Map.of(
+                "pendingcount", pending,
+                "approvedcount", approved,
+                "rejectedcount", rejected,
+                "content", usersMap.values()
+        ));
     }
 
     private Status mapStatus(String status) {
@@ -112,20 +114,17 @@ public class UserService {
     }
 
 
-public Map<String, Object>  getUsersList(int size, int offset){
+    public Map<String, Object> getUsersList(int size, int offset) {
 
-if (size <= 0 ){
-    size = 20;
-}
-if (offset <= 1){
-    offset =1;
-}
+        if (size <= 0) {
+            size = 20;
+        }
+        if (offset <= 1) {
+            offset = 1;
+        }
 
-// Step 1
-    List<String> pageIds = userRepository.findUserIds(size, offset);
-
-
-    List<UserProjection> userProjections = userRepository.fetchUsersByIds(pageIds);
-   return getUserResponse(userProjections);
-}
+        List<String> pageIds = userRepository.findUserIds(size, offset);
+        List<UserProjection> userProjections = userRepository.fetchUsersByIds(pageIds);
+        return getUserResponse(userProjections);
+    }
 }
