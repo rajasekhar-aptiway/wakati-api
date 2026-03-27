@@ -68,7 +68,7 @@ public class UserRegistrationService {
         User user = new User();
         user.setUserId(userId);
         user.setUserType(request.getUserType());
-        user.setMobileNo(request.getMobileNo());
+        user.setMobileNo("269"+request.getMobileNo());
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
         user.setIsland(request.getIsland());

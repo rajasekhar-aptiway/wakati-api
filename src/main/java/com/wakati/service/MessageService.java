@@ -33,7 +33,7 @@ public class MessageService {
     }
 
 
-    public String get(String key, Object... args) {
+    private String get(String key, Object... args) {
 
         String lang = userContext.getCurrentLanguage();
         String message = cacheService.getMessage(key, lang);
