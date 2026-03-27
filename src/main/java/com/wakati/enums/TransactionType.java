@@ -1,0 +1,15 @@
+package com.wakati.enums;
+
+public enum TransactionType {
+    TRANSFER,
+    CASH_DEPOSIT,
+    CASH_WITHDRAWAL,
+    SECURITY_DEPOSIT,
+    SECURITY_DEPOSIT_RETURN,
+    BANK_DEPOSIT,
+    BANK_WITHDRAWAL,
+    ACCOUNT_CLOSURE,
+    COMMISSION,
+    _TMP,
+    OPENING_BALANCE
+}
