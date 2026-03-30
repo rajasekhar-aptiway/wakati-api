@@ -1,6 +1,9 @@
 package com.wakati.notification;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
@@ -18,6 +21,12 @@ public class NotificationClient {
     @Value("${bulk.sms.api-url}")
     private static String BASE_URL;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String mailUsername;
+
     public NotificationClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -31,7 +40,15 @@ public class NotificationClient {
         restTemplate.postForObject(BASE_URL + "/send", new HttpEntity<>(request, headers), String.class);
     }
 
-    public void sendEmail(Object request) {
-        restTemplate.postForObject(BASE_URL + "/send", request, String.class);
+    public void sendEmail(String to, String subject, String content) throws  Exception{
+//        restTemplate.postForObject(BASE_URL + "/send", request, String.class);
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setFrom(mailUsername);
+            mail.setTo(to);
+            mail.setSubject(subject);   // ✅ dynamic subject
+            mail.setText(content);
+
+            javaMailSender.send(mail);
+
     }
 }

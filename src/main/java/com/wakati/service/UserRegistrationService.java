@@ -1,22 +1,22 @@
 package com.wakati.service;
 
 import com.wakati.I18NConstants;
-import com.wakati.entity.OtpChallenge;
-import com.wakati.entity.User;
-import com.wakati.entity.UserAttributes;
-import com.wakati.entity.Wallet;
+import com.wakati.entity.*;
 import com.wakati.enums.*;
 import com.wakati.exception.WakatiException;
 import com.wakati.model.request.UserRegistrationRequest;
 import com.wakati.model.response.ResponseBuilder;
-import com.wakati.repository.OtpChallengeRepository;
-import com.wakati.repository.UserAttributesRepository;
-import com.wakati.repository.UserRepository;
-import com.wakati.repository.WalletRepository;
+import com.wakati.notification.NotificationService;
+import com.wakati.repository.*;
+import com.wakati.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -36,6 +36,18 @@ public class UserRegistrationService {
 
     @Autowired
     private ResponseBuilder responseBuilder;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private UserCredentialsRepository userCredentialsRepository;
+
+    @Autowired
+    private EmailTemplatesRepository emailTemplatesRepository;
 
     @Transactional
     public Map<String, Object> register(UserRegistrationRequest request) {
@@ -77,6 +89,27 @@ public class UserRegistrationService {
         user.setCreatedBy(userId);
 
         userRepository.save(user);
+
+        UserCredentials credentials = new UserCredentials();
+        credentials.setUser(user);
+        String defaultPassword = PasswordUtil.generatePassword(8);
+        credentials.setPassword(passwordEncoder.encode(defaultPassword));
+        credentials.setPasswordAlgo("PASSWORD_BCRYPT");
+        credentials.setCreatedBy(user.getUserId());
+        credentials.setCreatedAt(LocalDateTime.now());
+        userCredentialsRepository.save(credentials);
+
+        Optional<EmailTemplate> templateOpt = emailTemplatesRepository.findByTemplateKeyAndLanguage("ACCOUNT_CREATED", user.getPreferredLanguage());
+        if(templateOpt.isPresent()){
+            EmailTemplate emailTemplate = templateOpt.get();
+            String body = emailTemplate.getBody();
+            body = body.replace("{{password}}",defaultPassword);
+            try {
+                notificationService.sendEmail(user.getEmail(), "ACCOUNT_APPROVED", body);
+            }catch (Exception e){
+                return responseBuilder.error(HttpStatus.EXPECTATION_FAILED,I18NConstants.ERROR_WHILE_SENDING_EMAIL);
+            }
+        }
 
         // ✅ 5. Attributes
         if (request.getAttributes() != null) {

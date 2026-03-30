@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface NotificationService {
-    void sendSms(String phoneNumber, String templateId, Language language, NotificationType type);
-    void sendEmail(String email, String templateId, Language language, NotificationType type);
+    void sendSms(String phoneNumber, String templateId, Language language, String content);
+    void sendEmail(String email, String subject,String content) throws Exception ;
 }
