@@ -27,6 +27,8 @@ public class AuthService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private DealerSecurityDepositsRepository dealerSecurityDepositsRepository;
+    @Autowired
     private UserCredentialsRepository credentialsRepository;
     @Autowired
     private RefreshTokenRepository refreshRepo;
@@ -90,7 +92,7 @@ public class AuthService {
 
         // ✅ Dealer check
         if (user.getUserType() == UserType.DEALER &&
-            !userRepository.hasSecurityDeposit(user.getUserId())) {
+            !dealerSecurityDepositsRepository.hasSecurityDeposit(user.getUserId())) {
 
             throw new WakatiException(DEALER_NOT_ACTIVATED);
         }

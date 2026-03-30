@@ -34,7 +34,7 @@ public interface SessionLogRepository extends JpaRepository<SessionLog, Long> {
     UPDATE SessionLog s
     SET s.logoutAt = CURRENT_TIMESTAMP,
         s.logoutType = 'FORCED'
-    WHERE s.userId = :userId AND s.logoutAt IS NULL
+    WHERE s.user.userId = :userId AND s.logoutAt IS NULL
 """)
     void closeActiveSessions(@Param("userId") String userId);
 }

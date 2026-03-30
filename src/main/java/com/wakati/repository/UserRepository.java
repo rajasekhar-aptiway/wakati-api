@@ -144,11 +144,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     """)
     List<User> findUsersByMobileOrdered(@Param("mobile") String mobile);
 
-    @Query("""
-    SELECT COUNT(d) > 0
-    FROM DealerSecurityDeposit d
-    WHERE d.dealerId = :userId
-""")
-    boolean hasSecurityDeposit(@Param("userId") String userId);
+
 
 }
