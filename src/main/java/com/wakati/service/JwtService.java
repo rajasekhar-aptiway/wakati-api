@@ -1,5 +1,6 @@
-package com.wakati.config;
+package com.wakati.service;
 
+import com.wakati.config.JwtValidationResult;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

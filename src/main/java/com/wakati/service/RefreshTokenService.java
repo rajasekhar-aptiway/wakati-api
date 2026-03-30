@@ -1,7 +1,6 @@
 package com.wakati.service;
 
 import com.wakati.I18NConstants;
-import com.wakati.config.JwtService;
 import com.wakati.entity.RefreshToken;
 import com.wakati.entity.User;
 import com.wakati.exception.WakatiException;

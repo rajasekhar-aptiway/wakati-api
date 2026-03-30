@@ -4,6 +4,7 @@ import com.wakati.I18NConstants;
 import com.wakati.entity.User;
 import com.wakati.enums.Status;
 import com.wakati.repository.UserRepository;
+import com.wakati.service.JwtService;
 import com.wakati.service.MessageService;
 import com.wakati.util.JwtUtils;
 import jakarta.servlet.FilterChain;

@@ -135,4 +135,20 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findTopByEmailAndStatusNotOrderByCreatedAtDesc(String email, Status status);
 
+    @Query("""
+        SELECT u FROM User u
+        WHERE u.mobileNo = :mobile
+        ORDER BY 
+            CASE WHEN u.status = 'APPROVED' THEN 0 ELSE 1 END,
+            u.createdAt DESC
+    """)
+    List<User> findUsersByMobileOrdered(@Param("mobile") String mobile);
+
+    @Query("""
+    SELECT COUNT(d) > 0
+    FROM DealerSecurityDeposit d
+    WHERE d.dealerId = :userId
+""")
+    boolean hasSecurityDeposit(@Param("userId") String userId);
+
 }
