@@ -1,18 +1,18 @@
 package com.wakati.model.request;
 
 public class LoginRequest {
-    private String mobileNumber;
+    private String mobileNo;
     private String password;
     private String fcmToken;
     private boolean forctLogout;
     private String refreshToken;
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getMobileNo() {
+        return mobileNo;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setMobileNo(String mobileNumber) {
+        this.mobileNo = mobileNumber;
     }
 
     public String getPassword() {

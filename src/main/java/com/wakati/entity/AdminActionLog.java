@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "ADMIN_ACTION_LOG")
-public class AdminActionLog {
+public class AdminActionLog extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class AdminActionLog {
     private String details;
 
     private String ipAddress;
-    private LocalDateTime createdAt;
+
 
     public Long getId() {
         return id;
@@ -69,13 +69,5 @@ public class AdminActionLog {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

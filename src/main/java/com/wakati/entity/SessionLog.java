@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SESSION_LOG")
-public class SessionLog {
+public class SessionLog extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class SessionLog {
 
     private Integer durationSeconds;
 
-    private LocalDateTime createdAt;
+
 
     public Long getId() {
         return id;
@@ -104,11 +104,4 @@ public class SessionLog {
         this.durationSeconds = durationSeconds;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

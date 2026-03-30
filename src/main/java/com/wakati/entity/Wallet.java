@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "WALLET")
-public class Wallet {
+public class Wallet extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +29,7 @@ public class Wallet {
     @Enumerated(EnumType.STRING)
     private WalletStatus status;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     @OneToMany(mappedBy = "ledgerId")
     private List<WalletLedger> ledgers;
@@ -83,21 +82,7 @@ public class Wallet {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public List<WalletLedger> getLedgers() {
         return ledgers;

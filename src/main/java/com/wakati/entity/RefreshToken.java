@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "REFRESH_TOKENS")
-public class RefreshToken {
+public class RefreshToken  extends  BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,6 @@ public class RefreshToken {
 
     private Boolean revoked;
 
-    private LocalDateTime createdAt;
 
     private String replacedBy;
     private LocalDateTime lastUsedAt;
@@ -69,13 +68,6 @@ public class RefreshToken {
         this.revoked = revoked;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getReplacedBy() {
         return replacedBy;
@@ -109,5 +101,4 @@ public class RefreshToken {
         this.userAgent = userAgent;
     }
 
-    // Getters and Setters
 }

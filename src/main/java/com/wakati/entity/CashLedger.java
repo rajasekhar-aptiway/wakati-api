@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CASH_LEDGER")
-public class CashLedger {
+public class CashLedger extends BaseCreatedAtEntity {
 
     @Id
     private String ledgerId;
@@ -26,7 +26,7 @@ public class CashLedger {
     private Double amount;
     private Double balanceAfter;
 
-    private LocalDateTime createdAt;
+
 
     public String getLedgerId() {
         return ledgerId;
@@ -76,11 +76,4 @@ public class CashLedger {
         this.balanceAfter = balanceAfter;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

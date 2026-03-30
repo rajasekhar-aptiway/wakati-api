@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CUSTOMER_CLOSURE_REQUEST")
-public class CustomerClosureRequest {
+public class CustomerClosureRequest extends BaseUpdatedAtEntity {
 
     @Id
     private String closureRequestId;
@@ -33,8 +33,7 @@ public class CustomerClosureRequest {
 
     private LocalDateTime approvedAt;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public String getClosureRequestId() {
         return closureRequestId;
@@ -100,19 +99,4 @@ public class CustomerClosureRequest {
         this.approvedAt = approvedAt;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SECURITY_DEPOSITS")
-public class SecurityDeposit {
+public class SecurityDeposit extends BaseCreatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,6 @@ public class SecurityDeposit {
     @Column(name = "status", length = 100)
     private String status;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -67,11 +65,4 @@ public class SecurityDeposit {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

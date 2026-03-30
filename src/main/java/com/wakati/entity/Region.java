@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "REGIONS")
-public class Region {
+public class Region extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,7 @@ public class Region {
     @Column(name = "regionKm")
     private String regionKm;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     @OneToMany(mappedBy = "region")
     private List<User> users;
@@ -76,22 +75,6 @@ public class Region {
 
     public void setRegionKm(String regionKm) {
         this.regionKm = regionKm;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public List<User> getUsers() {

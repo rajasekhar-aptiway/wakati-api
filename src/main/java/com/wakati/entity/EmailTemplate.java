@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "EMAIL_TEMPLATES")
 @IdClass(EmailTemplateId.class)
-public class EmailTemplate {
+public class EmailTemplate extends BaseUpdatedAtEntity{
 
     @Id
     @Column(name = "template_key", length = 100, nullable = false)
@@ -32,11 +32,7 @@ public class EmailTemplate {
     @Column(name = "updated_by", length = 36)
     private String updatedBy;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
 
     public String getTemplateKey() {
         return templateKey;
@@ -94,19 +90,4 @@ public class EmailTemplate {
         this.updatedBy = updatedBy;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

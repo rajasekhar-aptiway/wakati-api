@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TREASURY_ACTIONS")
-public class TreasuryActions {
+public class TreasuryActions extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,8 +36,7 @@ public class TreasuryActions {
 
     private String remarks;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -119,19 +118,4 @@ public class TreasuryActions {
         this.remarks = remarks;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

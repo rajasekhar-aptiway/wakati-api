@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "TRANSACTIONS")
-public class Transaction {
+public class Transaction extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,6 @@ public class Transaction {
     private String status;
     private String batchId;
 
-    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "transaction")
     private List<TransactionDispute> disputes;
@@ -155,13 +154,6 @@ public class Transaction {
         this.batchId = batchId;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public List<TransactionDispute> getDisputes() {
         return disputes;

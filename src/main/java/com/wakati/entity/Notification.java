@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "NOTIFICATIONS")
-public class Notification {
+public class Notification extends BaseUpdatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,8 +49,7 @@ public class Notification {
     private String payRequestId;
     private String collectionRequestId;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -180,21 +179,4 @@ public class Notification {
         this.collectionRequestId = collectionRequestId;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and Setters
 }

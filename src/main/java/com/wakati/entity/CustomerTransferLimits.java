@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CUSTOMER_TRANSFER_LIMITS")
-public class CustomerTransferLimits {
+public class CustomerTransferLimits extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,7 @@ public class CustomerTransferLimits {
     @JoinColumn(name = "set_by", referencedColumnName = "user_id")
     private User setBy;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -68,19 +67,4 @@ public class CustomerTransferLimits {
         this.setBy = setBy;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

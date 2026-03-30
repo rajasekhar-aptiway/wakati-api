@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User extends BaseUpdatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,9 +41,6 @@ public class User {
 
     private String managedById;
     private String createdBy;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     private String lastLogin;
 
@@ -183,22 +180,6 @@ public class User {
 
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getLastLogin() {

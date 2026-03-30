@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "PAY_REQUEST")
-public class PayRequest {
+public class PayRequest extends BaseUpdatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,8 +37,7 @@ public class PayRequest {
     private LocalDateTime otpVerifiedAtReceiverToSd;
     private LocalDateTime otpVerifiedAtSdToDealer;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     @ManyToOne
     @JoinColumn(name = "partner_agent_id", referencedColumnName = "user_id")
@@ -143,21 +142,6 @@ public class PayRequest {
         this.otpVerifiedAtSdToDealer = otpVerifiedAtSdToDealer;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public User getPartnerAgent() {
         return partnerAgent;

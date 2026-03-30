@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "USER_CREDENTIALS")
-public class UserCredentials {
+public class UserCredentials extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,8 @@ public class UserCredentials {
     private String failedAttempts;
     private String lockedUntil;
 
-    private LocalDateTime createdAt;
     private String createdBy;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -115,13 +114,6 @@ public class UserCredentials {
         this.lockedUntil = lockedUntil;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getCreatedBy() {
         return createdBy;
@@ -131,13 +123,4 @@ public class UserCredentials {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and Setters
 }

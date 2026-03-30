@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEALER_CUMULATIVE_STATS")
-public class DealerCumulativeStats {
+public class DealerCumulativeStats extends BaseUpdatedAtEntity{
 
     @Id
     @OneToOne
@@ -21,7 +21,7 @@ public class DealerCumulativeStats {
 
     private LocalDate dailyResetDate;
 
-    private LocalDateTime updatedAt;
+
 
     public User getDealer() {
         return dealer;
@@ -71,11 +71,4 @@ public class DealerCumulativeStats {
         this.dailyResetDate = dailyResetDate;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

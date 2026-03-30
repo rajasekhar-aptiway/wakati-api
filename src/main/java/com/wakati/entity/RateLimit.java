@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "RATE_LIMITS")
-public class RateLimit {
+public class RateLimit extends BaseCreatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,6 @@ public class RateLimit {
     private String keyType;
     private String keyValue;
 
-    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
@@ -50,11 +49,4 @@ public class RateLimit {
         this.keyValue = keyValue;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

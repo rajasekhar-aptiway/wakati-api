@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CASH")
-public class Cash {
+public class Cash extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +24,7 @@ public class Cash {
 
     private String balance;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -67,21 +66,4 @@ public class Cash {
         this.balance = balance;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    // Getters and Setters
 }

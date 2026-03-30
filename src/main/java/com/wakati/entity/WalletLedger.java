@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "WALLET_LEDGER")
-public class WalletLedger {
+public class WalletLedger extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +25,7 @@ public class WalletLedger {
 
     private String amount;
     private String balanceAfter;
-
-    private LocalDateTime createdAt;
-
+    
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
@@ -82,11 +80,4 @@ public class WalletLedger {
         this.balanceAfter = balanceAfter;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

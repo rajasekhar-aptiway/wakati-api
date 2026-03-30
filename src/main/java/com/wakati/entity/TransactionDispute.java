@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "TRANSACTION_DISPUTES")
-public class TransactionDispute {
+public class TransactionDispute extends BaseUpdatedAtEntity{
 
     @Id
     private String disputeId;
@@ -32,8 +32,7 @@ public class TransactionDispute {
 
     private String resolution;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public String getDisputeId() {
         return disputeId;
@@ -91,19 +90,4 @@ public class TransactionDispute {
         this.resolution = resolution;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

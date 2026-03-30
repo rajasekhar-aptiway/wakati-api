@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "COMMISSION_CONFIGURATION",
         uniqueConstraints = @UniqueConstraint(columnNames = {"channel","txn_type","status"}))
-public class CommissionConfiguration {
+public class CommissionConfiguration extends BaseUpdatedAtEntity{
 
     @Id
     private String commissionId;
@@ -30,8 +30,6 @@ public class CommissionConfiguration {
     private String createdBy;
     private String updatedBy;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
     public String getCommissionId() {
         return commissionId;
@@ -95,21 +93,5 @@ public class CommissionConfiguration {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

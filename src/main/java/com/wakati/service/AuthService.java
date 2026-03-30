@@ -46,7 +46,7 @@ public class AuthService {
     @Transactional
     public Map<String, Object> login(LoginRequest request, HttpServletRequest http) {
 
-        String mobile = request.getMobileNumber();
+        String mobile = request.getMobileNo();
         String password = request.getPassword();
         String fcmToken = request.getFcmToken();
 
@@ -63,7 +63,7 @@ public class AuthService {
                 .findFirst()
                 .orElseThrow(() -> new WakatiException(MOBILE_NOT_REGISTERED));
 
-        UserCredentials cred = credentialsRepository.findByUserId(user.getUserId())
+        UserCredentials cred = credentialsRepository.findByUser_UserId(user.getUserId())
                 .orElseThrow(() -> new WakatiException(I18NConstants.INVALID_CREDENTIALS));
 
         // ✅ Password check (bcrypt + legacy)
@@ -86,9 +86,9 @@ public class AuthService {
         }
 
         // ✅ Status check
-        if (user.getStatus() != Status.APPROVED) {
-            throw new WakatiException(I18NConstants.ACCOUNT_NOT_ACTIVE);
-        }
+//        if (user.getStatus() != Status.APPROVED) {
+//            throw new WakatiException(I18NConstants.ACCOUNT_NOT_ACTIVE);
+//        }
 
         // ✅ Dealer check
         if (user.getUserType() == UserType.DEALER &&
@@ -123,7 +123,7 @@ public class AuthService {
         sessionLogRepo.closeActiveSessions(user.getUserId());
 
         // 2. Delete old refresh tokens
-        refreshRepo.deleteByUserId(user.getUserId());
+        refreshRepo.deleteByUser_userId(user.getUserId());
 
         // 3. Insert new refresh token
         RefreshToken token = new RefreshToken();
@@ -131,6 +131,7 @@ public class AuthService {
         token.setTokenHash(refreshHash);
         token.setExpiresAt(RefreshTokenUtil.expiresInDays(30));
         token.setIp(ip);
+        token.setRevoked(true);
         token.setUserAgent(userAgent);
 
         refreshRepo.save(token);

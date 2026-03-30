@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CASH_TRANSACTION_LEDGER")
-public class CashTransactionLedger {
+public class CashTransactionLedger extends BaseCreatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class CashTransactionLedger {
     private String reasonCode;
     private String referenceId;
 
-    private LocalDateTime createdAt;
+
 
     public Integer getId() {
         return id;
@@ -127,13 +127,4 @@ public class CashTransactionLedger {
         this.referenceId = referenceId;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    // Getters and Setters
 }

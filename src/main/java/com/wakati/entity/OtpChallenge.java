@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "OTP_CHALLENGES")
-public class OtpChallenge {
+public class OtpChallenge extends BaseUpdatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,7 @@ public class OtpChallenge {
     private String attempts;
     private String verified;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
 
     public Integer getId() {
         return id;
@@ -106,19 +105,4 @@ public class OtpChallenge {
         this.verified = verified;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

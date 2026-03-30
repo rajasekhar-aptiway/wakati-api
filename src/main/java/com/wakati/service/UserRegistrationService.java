@@ -49,6 +49,9 @@ public class UserRegistrationService {
     @Autowired
     private EmailTemplatesRepository emailTemplatesRepository;
 
+    @Autowired
+    private RegionRepository regionRepository;
+
     @Transactional
     public Map<String, Object> register(UserRegistrationRequest request) {
 
@@ -86,6 +89,13 @@ public class UserRegistrationService {
         user.setIsland(request.getIsland());
         user.setStatus(Status.DRAFT);
         user.setRegistrationStage(RegistrationStage.MOBILE_VERIFICATION_PENDING);
+        user.setManagedByType(ManagedByType.PLATFORM);
+        user.setPreferredLanguage("en");
+        Region region = regionRepository.findByCode(request.getRegion())
+                .orElseThrow(() -> new RuntimeException("Region not found: " + request.getRegion()));
+        user.setRegion(region);
+        user.setVerifiedByAdjudicator(VerificationStatus.PENDING);
+        user.setVerifiedByAdmin(VerificationStatus.PENDING);
         user.setCreatedBy(userId);
 
         userRepository.save(user);
@@ -93,6 +103,7 @@ public class UserRegistrationService {
         UserCredentials credentials = new UserCredentials();
         credentials.setUser(user);
         String defaultPassword = PasswordUtil.generatePassword(8);
+        System.out.println(defaultPassword);
         credentials.setPassword(passwordEncoder.encode(defaultPassword));
         credentials.setPasswordAlgo("PASSWORD_BCRYPT");
         credentials.setCreatedBy(user.getUserId());
@@ -145,6 +156,7 @@ public class UserRegistrationService {
         otpEntity.setOtpId(UUID.randomUUID().toString());
         otpEntity.setOtp(otp);
         otpEntity.setUser(user);
+        otpEntity.setOtpHash("");
         otpEntity.setPurpose(OtpPurpose.REGISTER);
 
         otpRepository.save(otpEntity);

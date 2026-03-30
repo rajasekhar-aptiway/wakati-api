@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEALER_ASSIGNMENT")
-public class DealerAssignment {
+public class DealerAssignment extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,7 @@ public class DealerAssignment {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private LocalDateTime createdAt;
+
 
     public Integer getId() {
         return id;
@@ -79,11 +79,4 @@ public class DealerAssignment {
         this.status = status;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

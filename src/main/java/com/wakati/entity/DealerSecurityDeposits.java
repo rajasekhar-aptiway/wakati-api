@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEALER_SECURITY_DEPOSITS")
-public class DealerSecurityDeposits {
+public class DealerSecurityDeposits extends BaseUpdatedAtEntity {
 
 
     @OneToOne
@@ -26,8 +26,7 @@ public class DealerSecurityDeposits {
 
     private String disconnecton;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime closedAt;
+
 
     public User getDealer() {
         return dealer;
@@ -85,19 +84,4 @@ public class DealerSecurityDeposits {
         this.disconnecton = disconnecton;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getClosedAt() {
-        return closedAt;
-    }
-
-    public void setClosedAt(LocalDateTime closedAt) {
-        this.closedAt = closedAt;
-    }
 }

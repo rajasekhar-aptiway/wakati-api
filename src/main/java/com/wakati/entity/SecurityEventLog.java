@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "SECURITY_EVENT_LOG")
-public class SecurityEventLog {
+public class SecurityEventLog extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class SecurityEventLog {
     private String userAgent;
     private String traceId;
 
-    private LocalDateTime createdAt;
+
 
     public Long getId() {
         return id;
@@ -84,11 +84,4 @@ public class SecurityEventLog {
         this.traceId = traceId;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 }

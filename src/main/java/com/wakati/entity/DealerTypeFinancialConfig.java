@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "DEALER_TYPE_FINANCIAL_CONFIG")
-public class DealerTypeFinancialConfig {
+public class DealerTypeFinancialConfig extends BaseCreatedAtEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class DealerTypeFinancialConfig {
     private String withdrawalMaxLimit;
     private String minimumOpeningBalance;
 
-    private LocalDateTime createdAt;
+
 
     private Double dailyDepositLimit;
     private Double dailyWithdrawalLimit;
@@ -92,13 +92,6 @@ public class DealerTypeFinancialConfig {
         this.minimumOpeningBalance = minimumOpeningBalance;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public Double getDailyDepositLimit() {
         return dailyDepositLimit;

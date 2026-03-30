@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "USER_DOCUMENTS")
-public class UserDocuments {
+public class UserDocuments extends BaseCreatedAtEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,6 @@ public class UserDocuments {
     private VerificationStatus verificationStatus;
 
     private String createdBy;
-    private LocalDateTime createdAt;
 
     private String verifiedBy;
     private String verifiedAt;
@@ -102,13 +101,6 @@ public class UserDocuments {
         this.createdBy = createdBy;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
 
     public String getVerifiedBy() {
         return verifiedBy;

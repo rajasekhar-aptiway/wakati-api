@@ -8,7 +8,7 @@ import java.util.Date;
 @Entity
 @Table(name = "SMS_TEMPLATES")
 @IdClass(SmsTemplateId.class)
-public class SmsTemplate {
+public class SmsTemplate extends BaseUpdatedAtEntity{
 
     @Id
     @Column(name = "template_key", length = 60)
@@ -31,28 +31,9 @@ public class SmsTemplate {
     @Column(name = "updated_by", length = 36)
     private String updatedBy;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private Date updatedAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
 
     // ===== Lifecycle =====
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = new Date();
-        if (this.isActive == null) {
-            this.isActive = true;
-        }
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = new Date();
-    }
 
     // ===== Getters & Setters =====
 
@@ -74,8 +55,6 @@ public class SmsTemplate {
     public String getUpdatedBy() { return updatedBy; }
     public void setUpdatedBy(String updatedBy) { this.updatedBy = updatedBy; }
 
-    public Date getUpdatedAt() { return updatedAt; }
-    public Date getCreatedAt() { return createdAt; }
 
     // ===== toString =====
 
