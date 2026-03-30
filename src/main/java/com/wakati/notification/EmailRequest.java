@@ -8,6 +8,8 @@ public class EmailRequest {
     private Language language;
     private NotificationType type;
     private String email;
+    private String from;
+    private String body;
 
     public String getTemplateId() {
         return templateId;
@@ -39,6 +41,22 @@ public class EmailRequest {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     @Override

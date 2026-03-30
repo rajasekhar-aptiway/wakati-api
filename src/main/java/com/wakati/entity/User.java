@@ -162,7 +162,7 @@ public class User {
     }
 
     public ManagedByType getManagedByType() {
-        return managedByType;
+        return managedByType == null ? ManagedByType.PLATFORM : managedByType;
     }
 
     public void setManagedByType(ManagedByType managedByType) {

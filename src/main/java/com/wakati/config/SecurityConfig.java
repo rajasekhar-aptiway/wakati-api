@@ -1,5 +1,6 @@
 package com.wakati.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,14 @@ public class SecurityConfig {
             http
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
-                            .requestMatchers("/api/auth/**").permitAll()
+                            .requestMatchers("/api/auth/**", "/api/register").permitAll()
                             .anyRequest().authenticated()
                     )
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
             return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
