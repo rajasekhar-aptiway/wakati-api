@@ -19,10 +19,10 @@ public class NotificationController {
             @RequestParam String phoneNumber,
             @RequestParam String templateId,
             @RequestParam Language language,
-            @RequestParam NotificationType type
+            @RequestParam String content
     ) {
 
-        notificationService.sendSms(phoneNumber, templateId, language, type);
+        notificationService.sendSms(phoneNumber, templateId, language,content);
 
         return ResponseEntity.ok("SMS Sent Successfully");
     }
@@ -30,11 +30,15 @@ public class NotificationController {
     @PostMapping("/email")
     public ResponseEntity<String> sendEmail(
             @RequestParam String email,
-            @RequestParam String templateId,
+            @RequestParam String subject,
             @RequestParam Language language,
-            @RequestParam NotificationType type
+            @RequestParam String content
     ) {
-        notificationService.sendEmail(email, templateId, language, type);
+        try {
+            notificationService.sendEmail(email, subject, content);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return ResponseEntity.ok("Email sent successfully");
     }
 }
