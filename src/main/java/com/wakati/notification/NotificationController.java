@@ -17,12 +17,10 @@ public class NotificationController {
     @PostMapping("/sms")
     public ResponseEntity<String> sendSms(
             @RequestParam String phoneNumber,
-            @RequestParam String templateId,
-            @RequestParam Language language,
             @RequestParam String content
     ) {
 
-        notificationService.sendSms(phoneNumber, templateId, language,content);
+        notificationService.sendSms(phoneNumber, content);
 
         return ResponseEntity.ok("SMS Sent Successfully");
     }

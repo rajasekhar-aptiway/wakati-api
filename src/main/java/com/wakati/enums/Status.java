@@ -6,5 +6,7 @@ public enum Status {
     COMPLETED,
     REJECTED,
     DRAFT,
-    CLOSURE_PENDING
+    CLOSURE_PENDING,
+    BLOCKED,
+    SUSPENDED
 }

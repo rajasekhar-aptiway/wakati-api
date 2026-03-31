@@ -28,7 +28,7 @@ public class NotificationServiceImpl implements NotificationService {
     private EmailTemplatesRepository emailTemplatesRepository;
 
     @Override
-    public void sendSms(String phoneNumber, String templateId, Language language, String content) {
+    public void sendSms(String phoneNumber, String content) {
 
         SmsProviderRequest request = new SmsProviderRequest();
         request.setPhoneNumber(phoneNumber);

@@ -4,6 +4,7 @@ import com.wakati.entity.Wallet;
 import com.wakati.enums.AccountStatus;
 import com.wakati.enums.OwnerType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,15 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     List<Wallet> findByOwnerType(OwnerType ownerType);
 
     List<Wallet> findByStatus(AccountStatus status);
+
+    @Modifying
+    @Query("""
+    UPDATE Wallet w
+    SET w.status = :status
+    WHERE w.owner.userId = :userId
+""")
+    void updateStatusByOwnerId(@Param("userId") String userId,
+                               @Param("status") AccountStatus status);
 
 //    @Query("SELECT COALESCE(w.balance,0) FROM Wallet w WHERE w.ownerId = :userId")
 //    Double getWalletBalance(@Param("userId") String userId);

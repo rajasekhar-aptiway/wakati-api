@@ -14,7 +14,10 @@ public class AdminActionLog extends BaseCreatedAtEntity{
     private Long id;
 
     private String performedBy;
-    private String actionType;
+
+    @Enumerated(EnumType.STRING)
+    private ActionType actionType;
+
     private String targetUserId;
 
     @Lob
@@ -39,14 +42,6 @@ public class AdminActionLog extends BaseCreatedAtEntity{
         this.performedBy = performedBy;
     }
 
-    public String getActionType() {
-        return actionType;
-    }
-
-    public void setActionType(String actionType) {
-        this.actionType = actionType;
-    }
-
     public String getTargetUserId() {
         return targetUserId;
     }
@@ -69,5 +64,13 @@ public class AdminActionLog extends BaseCreatedAtEntity{
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public ActionType getActionType() {
+        return actionType;
+    }
+
+    public void setActionType(ActionType actionType) {
+        this.actionType = actionType;
     }
 }
