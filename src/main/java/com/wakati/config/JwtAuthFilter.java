@@ -83,7 +83,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             // ✅ 5. Status check
-            if (user.getStatus() != Status.APPROVED) {
+            if (user.getStatus() == Status.BLOCKED || user.getStatus() == Status.SUSPENDED) {
                 sendError(response, 403, messageService.get(I18NConstants.ACCOUNT_IS_NOT_ACTIVE));
                 return;
             }

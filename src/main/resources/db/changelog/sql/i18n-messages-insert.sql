@@ -1,4 +1,4 @@
-INSERT INTO wakati.i18n_messages(message_key,language,message) VALUES ('USER_ID_AND_OTP_REQUIRED','en','User ID and OTP are required'),	 ('USER_ID_REQUIRED','en','User ID is required'),
+INSERT INTO i18n_messages(message_key,language,message) VALUES ('USER_ID_AND_OTP_REQUIRED','en','User ID and OTP are required'),	 ('USER_ID_REQUIRED','en','User ID is required'),
 
 ('USER_NOT_FOUND','en','User not found'),
 

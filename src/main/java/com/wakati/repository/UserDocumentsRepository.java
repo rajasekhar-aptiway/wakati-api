@@ -28,4 +28,13 @@ public interface UserDocumentsRepository extends JpaRepository<UserDocuments, In
 """)
     void updateStatusByUserId(@Param("userId") String userId,
                               @Param("status") VerificationStatus status);
+
+    @Modifying
+    @Query("""
+        UPDATE UserDocuments d
+        SET d.verificationStatus = 'EXPIRED'
+        WHERE d.user.userId = :userId
+        AND d.verificationStatus IN ('PENDING','REJECTED','APPROVED')
+    """)
+    void expireDocuments(@Param("userId") String userId);
 }
