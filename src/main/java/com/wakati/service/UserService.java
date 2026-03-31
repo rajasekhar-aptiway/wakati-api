@@ -63,15 +63,15 @@ public class UserService {
         String userId = request.getUserId();
         String password = request.getNewPassowrd();
         String oldPassword = request.getOldPassword();
-
-        if(password.equals(oldPassword)){
-            throw new WakatiException(PASSWORDS_MUST_NOT_BE_SAME);
-        }
+        
 
         if (userId == null || password == null || password.isBlank()) {
             throw new WakatiException(INVALID_REQUEST);
         }
 
+        if(password.equals(oldPassword)){
+            throw new WakatiException(PASSWORDS_MUST_NOT_BE_SAME);
+        }
         // ✅ Get authenticated user (from filter)
         User authUser = UserContextHolder.getUser();
 

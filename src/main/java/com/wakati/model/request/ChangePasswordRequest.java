@@ -3,7 +3,7 @@ package com.wakati.model.request;
 public class ChangePasswordRequest {
     private String userId;
     private String oldPassword;
-    private String newPassowrd;
+    private String newPassword;
 
     public String getUserId() {
         return userId;
@@ -22,10 +22,10 @@ public class ChangePasswordRequest {
     }
 
     public String getNewPassowrd() {
-        return newPassowrd;
+        return newPassword;
     }
 
     public void setNewPassowrd(String newPassowrd) {
-        this.newPassowrd = newPassowrd;
+        this.newPassword = newPassowrd;
     }
 }
