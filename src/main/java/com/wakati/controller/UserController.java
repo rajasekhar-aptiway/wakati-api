@@ -2,6 +2,7 @@ package com.wakati.controller;
 
 import com.wakati.enums.Status;
 import com.wakati.enums.UserType;
+import com.wakati.model.request.ChangePasswordRequest;
 import com.wakati.model.request.DTO.FetchRequestDTO;
 import com.wakati.model.request.UserRegistrationRequest;
 import com.wakati.service.UserRegistrationService;
@@ -53,5 +54,10 @@ public class UserController {
     @PostMapping("/fetch_list")
     public ResponseEntity<?> fetchUsers(@RequestBody FetchRequestDTO request ) {
         return ResponseEntity.ok(userService.getUsersList(request.getPageSize(), request.getPageNumber()));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        return ResponseEntity.ok(userService.changePassword(request));
     }
 }

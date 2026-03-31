@@ -1,17 +1,28 @@
 package com.wakati.service;
 
 import com.wakati.I18NConstants;
+import com.wakati.config.UserContextHolder;
+import com.wakati.entity.User;
+import com.wakati.entity.UserCredentials;
 import com.wakati.enums.Status;
 import com.wakati.enums.UserType;
+import com.wakati.exception.WakatiException;
+import com.wakati.model.request.ChangePasswordRequest;
 import com.wakati.model.response.ResponseBuilder;
 import com.wakati.model.response.UserProjection;
 import com.wakati.model.response.UserResponse;
+import com.wakati.repository.UserCredentialsRepository;
 import com.wakati.repository.UserRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
+
+import static com.wakati.I18NConstants.*;
 
 @Service
 public class UserService {
@@ -22,6 +33,12 @@ public class UserService {
 
     @Autowired
     private ResponseBuilder responseBuilder;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserCredentialsRepository credentialsRepository;
 
     public Map<String, Object> getUsers(Status status, List<UserType> type) {
 
@@ -38,6 +55,65 @@ public class UserService {
 
         return getUserResponse(rows);
     }
+
+
+    @Transactional
+    public Map<String, Object> changePassword(ChangePasswordRequest request) {
+
+        String userId = request.getUserId();
+        String password = request.getNewPassowrd();
+        String oldPassword = request.getOldPassword();
+
+        if(password.equals(oldPassword)){
+            throw new WakatiException(PASSWORDS_MUST_NOT_BE_SAME);
+        }
+
+        if (userId == null || password == null || password.isBlank()) {
+            throw new WakatiException(INVALID_REQUEST);
+        }
+
+        // ✅ Get authenticated user (from filter)
+        User authUser = UserContextHolder.getUser();
+
+        // 🔐 Prevent changing others' password
+        if (!authUser.getUserId().equals(userId)) {
+            throw new WakatiException(INVALID_REQUEST);
+        }
+
+        // ✅ Check user exists
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new WakatiException(USER_NOT_FOUND));
+
+        // ✅ Upsert credentials
+        UserCredentials cred = credentialsRepository
+                .findByUser_UserId(userId)
+                .orElseGet(() -> {
+                    UserCredentials c = new UserCredentials();
+                    c.setUser(user);
+                    return c;
+                });
+
+        if (!passwordEncoder.matches(oldPassword, cred.getPassword())) {
+            throw new WakatiException(INVALID_CURRENT_PASSWORD);
+        }
+        // ✅ Hash password
+        String hash = passwordEncoder.encode(password);
+        cred.setPassword(hash);
+        cred.setPasswordAlgo("PASSWORD_BCRYPT");
+        cred.setUpdatedAt(LocalDateTime.now());
+        credentialsRepository.save(cred);
+
+        //invalidate current session and force logout.
+        user.setSessionToken(null);
+        userRepository.save(user);
+
+        return responseBuilder.success(I18NConstants.PASSWORD_UPDATE_SUCCESS,Map.of(
+                "user_id", userId,
+                "user_type", user.getUserType()
+        ));
+
+    }
+
 
     private @NonNull Map<String, Object> getUserResponse(List<UserProjection> rows) {
         List<Object[]> objects = userRepository.countByStatusGrouped();
@@ -85,6 +161,8 @@ public class UserService {
                 "content", usersMap.values()
         ));
     }
+
+
 
     private Status mapStatus(String status) {
         if (status == null) return null;
