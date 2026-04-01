@@ -26,7 +26,7 @@ public class ResponseBuilder {
     public Map<String, Object> success(I18NConstants key, String responseKey, Object data) {
         return Map.of(
                 "code", 200,
-                "message", messageService.get(key),
+                "message", messageService.get(key,responseKey),
                 responseKey, data
         );
     }
