@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -132,7 +133,7 @@ public class AdminService {
                 user.setUserId(userId);
                 w.setOwner(user);
                 w.setOwnerType(OwnerType.USER);
-                w.setBalance("0");
+                w.setBalance(BigDecimal.ZERO);
                 w.setStatus(WalletStatus.ACTIVE);
                 walletRepository.save(w);
             }

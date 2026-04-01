@@ -3,6 +3,8 @@ package com.wakati.entity;
 import com.wakati.enums.OwnerType;
 import com.wakati.enums.WalletStatus;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Wallet extends BaseUpdatedAtEntity{
     @JoinColumn(name = "owner_id", referencedColumnName = "user_id")
     private User owner;
 
-    private String balance;
+    private BigDecimal balance;
 
     @Enumerated(EnumType.STRING)
     private WalletStatus status;
@@ -66,11 +68,11 @@ public class Wallet extends BaseUpdatedAtEntity{
         this.owner = owner;
     }
 
-    public String getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

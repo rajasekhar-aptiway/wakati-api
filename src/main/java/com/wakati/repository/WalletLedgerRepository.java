@@ -2,6 +2,7 @@ package com.wakati.repository;
 
 import com.wakati.entity.WalletLedger;
 import com.wakati.enums.EntryType;
+import com.wakati.model.response.TransactionProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +21,8 @@ public interface WalletLedgerRepository extends JpaRepository<WalletLedger, Inte
     List<WalletLedger> findByEntryType(EntryType entryType);
 
     List<WalletLedger> findByUserIdOrderByCreatedAtDesc(String userId);
+
+
 
 //    @Query("""
 //    SELECT COALESCE(SUM(wl.amount), 0)

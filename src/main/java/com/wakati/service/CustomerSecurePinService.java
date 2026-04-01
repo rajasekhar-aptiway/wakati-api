@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -83,7 +84,7 @@ public class CustomerSecurePinService {
                     wallet.setWalletId(user.getUserId());
                     wallet.setOwner(user);
                     wallet.setOwnerType(OwnerType.USER);
-                    wallet.setBalance("0");
+                    wallet.setBalance(BigDecimal.ZERO);
                     wallet.setStatus(WalletStatus.ACTIVE);
                     return walletRepository.save(wallet);
                 });

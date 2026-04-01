@@ -3,7 +3,9 @@ package com.wakati.repository;
 import com.wakati.entity.Wallet;
 import com.wakati.enums.AccountStatus;
 import com.wakati.enums.OwnerType;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -33,6 +35,15 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
 """)
     void updateStatusByOwnerId(@Param("userId") String userId,
                                @Param("status") AccountStatus status);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT w FROM Wallet w WHERE w.owner.userId = :ownerId")
+    Optional<Wallet> findByOwnerIdForUpdate(@Param("ownerId") String ownerId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT w FROM Wallet w WHERE w.owner.userId = :ownerId")
+    Wallet lockByOwnerId(@Param("ownerId") String ownerId);
+
 
 //    @Query("SELECT COALESCE(w.balance,0) FROM Wallet w WHERE w.ownerId = :userId")
 //    Double getWalletBalance(@Param("userId") String userId);

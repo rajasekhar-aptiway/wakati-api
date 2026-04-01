@@ -3,6 +3,7 @@ package com.wakati.repository;
 import com.wakati.entity.Transaction;
 import com.wakati.enums.TransactionChannel;
 import com.wakati.enums.TransactionType;
+import com.wakati.model.response.TransactionProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +29,96 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findByCreatedAtBetween(Date start, Date end);
 
     List<Transaction> findByBatchId(String batchId);
+
+    @Query("""
+    SELECT 
+        t.txnId AS txnId,
+        'CREDIT' AS entryType,
+        t.amount AS amount,
+        NULL AS balanceAfter,
+        t.createdAt AS createdAt,
+
+        t.txnType AS txnType,
+        t.txnCategory AS txnCategory,
+        t.channel AS channel,
+        t.initiatedBy AS initiatedBy,
+        t.sourceUser.userId AS sourceUserId,
+        t.targetUser.userId AS targetUserId,
+        t.remarks AS remarks,
+
+        su.fullName AS sourceName,
+        su.mobileNo AS sourceMobile,
+        tu.fullName AS targetName,
+        tu.mobileNo AS targetMobile
+
+    FROM Transaction t
+    LEFT JOIN t.sourceUser su
+    LEFT JOIN t.targetUser tu
+
+    WHERE t.txnType = 'COMMISSION'
+    AND t.sourceUser.userId = :userId
+""")
+    List<TransactionProjection> fetchCommission(@Param("userId") String userId);
+
+    @Query("""
+    SELECT 
+        wl.transaction.txnId AS txnId,
+        wl.entryType AS entryType,
+        wl.amount AS amount,
+        wl.balanceAfter AS balanceAfter,
+        wl.createdAt AS createdAt,
+
+        t.txnType AS txnType,
+        t.txnCategory AS txnCategory,
+        t.channel AS channel,
+        t.initiatedBy AS initiatedBy,
+        t.sourceUser.userId AS sourceUserId,
+        t.targetUser.userId AS targetUserId,
+        t.remarks AS remarks,
+
+        su.fullName AS sourceName,
+        su.mobileNo AS sourceMobile,
+        tu.fullName AS targetName,
+        tu.mobileNo AS targetMobile
+
+    FROM WalletLedger wl
+    LEFT JOIN Transaction t ON wl.transaction.txnId = t.txnId
+    LEFT JOIN t.sourceUser su
+    LEFT JOIN t.targetUser tu
+
+    WHERE wl.user.userId = :userId
+""")
+    List<TransactionProjection> fetchWalletLedger(@Param("userId") String userId);
+
+    @Query("""
+    SELECT
+     cl.transaction.txnId AS txnId,
+        cl.entryType AS entryType,
+        cl.amount AS amount,
+        cl.balanceAfter AS balanceAfter,
+        cl.createdAt AS createdAt,
+
+        t.txnType AS txnType,
+        t.txnCategory AS txnCategory,
+        t.channel AS channel,
+        t.initiatedBy AS initiatedBy,
+        t.sourceUser.userId AS sourceUserId,
+        t.targetUser.userId AS targetUserId,
+        t.remarks AS remarks,
+
+        su.fullName AS sourceName,
+        su.mobileNo AS sourceMobile,
+        tu.fullName AS targetName,
+        tu.mobileNo AS targetMobile
+
+    FROM CashLedger cl
+    LEFT JOIN Transaction t ON cl.transaction.txnId = t.txnId
+    LEFT JOIN t.sourceUser su
+    LEFT JOIN t.targetUser tu
+
+    WHERE cl.user.userId = :userId
+""")
+    List<TransactionProjection> fetchCashLedger(@Param("userId") String userId);
 
 //    @Query("""
 //        SELECT COALESCE(SUM(t.amount),0)
