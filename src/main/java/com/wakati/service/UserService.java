@@ -15,6 +15,8 @@ import com.wakati.repository.UserCredentialsRepository;
 import com.wakati.repository.UserRepository;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +41,12 @@ public class UserService {
 
     @Autowired
     private UserCredentialsRepository credentialsRepository;
+
+    @Cacheable(value = "users", key = "#userId")
+    public User getUserByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .orElse(null);
+    }
 
     public Map<String, Object> getUsers(Status status, List<UserType> type) {
 
@@ -204,5 +212,10 @@ public class UserService {
         List<String> pageIds = userRepository.findUserIds(size, offset);
         List<UserProjection> userProjections = userRepository.fetchUsersByIds(pageIds);
         return getUserResponse(userProjections);
+    }
+
+    @CacheEvict(value = "users", key = "#user.userId")
+    public void updateUser(User user) {
+        userRepository.save(user);
     }
 }

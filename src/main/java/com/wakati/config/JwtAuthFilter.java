@@ -3,9 +3,9 @@ package com.wakati.config;
 import com.wakati.I18NConstants;
 import com.wakati.entity.User;
 import com.wakati.enums.Status;
-import com.wakati.repository.UserRepository;
 import com.wakati.service.JwtService;
 import com.wakati.service.MessageService;
+import com.wakati.service.UserService;
 import com.wakati.util.JwtUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,7 +29,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private MessageService messageService;
@@ -66,8 +67,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             // ✅ 3. Fetch user
-            User user = userRepository.findByUserId(userId)
-                    .orElse(null);
+            User user = userService.getUserByUserId(userId);
 
             if (user == null) {
                 sendError(response, 401, messageService.get(I18NConstants.USER_NOT_FOUND));
@@ -91,9 +91,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // ✅ 6. Store user context (VERY IMPORTANT)
             UserContextHolder.setUser(user);
 
-            UsernamePasswordAuthenticationToken auth =
-                    new UsernamePasswordAuthenticationToken(user, null, List.of());
-            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                CustomUserPrincipal principal =
+                        new CustomUserPrincipal(user.getUserId(), user.getUserType().name());
+
+                UsernamePasswordAuthenticationToken auth =
+                        new UsernamePasswordAuthenticationToken(principal, null, List.of(new SimpleGrantedAuthority("ROLE_" + user.getUserType().name())));
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
 
             filterChain.doFilter(request, response);
         } finally {
