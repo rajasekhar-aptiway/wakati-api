@@ -4,6 +4,8 @@ import com.wakati.entity.MessageTranslation;
 import com.wakati.repository.MessageRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ public class MessageCacheService {
 
     private final Map<String, Map<String, String>> messages = new ConcurrentHashMap<>();
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     public void loadMessages() {
         List<MessageTranslation> list = repository.findAll();
 

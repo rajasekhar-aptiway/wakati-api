@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <!-- 1 -->
+    <changeSet id="001-regions" author="raj">
+        <createTable tableName="regions">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="code" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="island" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 2 -->
+    <changeSet id="002-islands" author="raj">
+        <createTable tableName="islands">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="code" type="VARCHAR(100)"><constraints unique="true"/></column>
+        </createTable>
+    </changeSet>
+
+    <!-- 3 -->
+    <changeSet id="003-users" author="raj">
+        <createTable tableName="users">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="user_type" type="VARCHAR(50)"/>
+            <column name="mobile_no" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="email" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="region" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 4 -->
+    <changeSet id="004-user_credentials" author="raj">
+        <createTable tableName="user_credentials">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="password" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 5 -->
+    <changeSet id="005-user_documents" author="raj">
+        <createTable tableName="user_documents">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="doc_type" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 6 -->
+    <changeSet id="006-session_log" author="raj">
+        <createTable tableName="session_log">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 7 -->
+    <changeSet id="007-refresh_tokens" author="raj">
+        <createTable tableName="refresh_tokens">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="token" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 8 -->
+    <changeSet id="008-otp_challenges" author="raj">
+        <createTable tableName="otp_challenges">
+            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="otp" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 9 -->
+    <changeSet id="009-security_event_log" author="raj">
+        <createTable tableName="security_event_log">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 10 -->
+    <changeSet id="010-notifications" author="raj">
+        <createTable tableName="notifications">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="message" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 11 -->
+    <changeSet id="011-i18n_messages" author="raj">
+        <createTable tableName="i18n_messages">
+            <column name="message_key" type="VARCHAR(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="language" type="VARCHAR(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="message" type="CLOB"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 12 -->
+    <changeSet id="012-email_templates" author="raj">
+        <createTable tableName="email_templates">
+            <column name="template_key" type="VARCHAR(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="language" type="VARCHAR(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="body" type="CLOB"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 13 -->
+    <changeSet id="013-sms_templates" author="raj">
+        <createTable tableName="sms_templates">
+            <column name="template_key" type="VARCHAR(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="language" type="VARCHAR(10)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="body" type="CLOB"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 14 -->
+    <changeSet id="014-rate_limits" author="raj">
+        <createTable tableName="rate_limits">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="endpoint" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 15 -->
+    <changeSet id="015-disputes" author="raj">
+        <createTable tableName="disputes">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="txn_id" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 16 -->
+    <changeSet id="016-user_roles" author="raj">
+        <createTable tableName="user_roles">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="role" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 17 -->
+    <changeSet id="017-user_permissions" author="raj">
+        <createTable tableName="user_permissions">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="permission" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 18 -->
+    <changeSet id="018-audit_log" author="raj">
+        <createTable tableName="audit_log">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="entity" type="VARCHAR(100)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 19 -->
+    <changeSet id="019-config" author="raj">
+        <createTable tableName="config">
+            <column name="key" type="VARCHAR(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!-- 20 -->
+    <changeSet id="020-platform_account" author="raj">
+        <createTable tableName="platform_account">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="balance" type="DECIMAL(18,2)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+
+<!-- 21 -->
+<changeSet id="021-transactions" author="raj">
+<createTable tableName="transactions">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="txn_id" type="VARCHAR(100)">
+        <constraints unique="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 22 -->
+<changeSet id="022-wallet" author="raj">
+<createTable tableName="wallet">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="balance" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 23 -->
+<changeSet id="023-wallet_ledger" author="raj">
+<createTable tableName="wallet_ledger">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 24 -->
+<changeSet id="024-cash" author="raj">
+<createTable tableName="cash">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="balance" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 25 -->
+<changeSet id="025-cash_ledger" author="raj">
+<createTable tableName="cash_ledger">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- continue pattern -->
+
+        <!-- 26 -->
+<changeSet id="026-pay_request" author="raj">
+<createTable tableName="pay_request">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 27 -->
+<changeSet id="027-collection_request" author="raj">
+<createTable tableName="collection_request">
+    <column name="id" type="INT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 28 -->
+<changeSet id="028-commission_configuration" author="raj">
+<createTable tableName="commission_configuration">
+    <column name="id" type="VARCHAR(100)">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="percent" type="DECIMAL(5,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 29 -->
+<changeSet id="029-bulk_transfer_batch" author="raj">
+<createTable tableName="bulk_transfer_batch">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 30 -->
+<changeSet id="030-treasury_actions" author="raj">
+<createTable tableName="treasury_actions">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 31 -->
+<changeSet id="031-dealer_security_deposits" author="raj">
+<createTable tableName="dealer_security_deposits">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 32 -->
+<changeSet id="032-dealer_assignment" author="raj">
+<createTable tableName="dealer_assignment">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 33 -->
+<changeSet id="033-dealer_cumulative_stats" author="raj">
+<createTable tableName="dealer_cumulative_stats">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 34 -->
+<changeSet id="034-customer_transfer_limits" author="raj">
+<createTable tableName="customer_transfer_limits">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 35 -->
+<changeSet id="035-customer_closure_request" author="raj">
+<createTable tableName="customer_closure_request">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 36 -->
+<changeSet id="036-platform_fees" author="raj">
+<createTable tableName="platform_fees">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+    <column name="amount" type="DECIMAL(18,2)"/>
+</createTable>
+</changeSet>
+
+        <!-- 37 -->
+<changeSet id="037-ledger_audit" author="raj">
+<createTable tableName="ledger_audit">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 38 -->
+<changeSet id="038-notification_queue" author="raj">
+<createTable tableName="notification_queue">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 39 -->
+<changeSet id="039-webhook_events" author="raj">
+<createTable tableName="webhook_events">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        <!-- 40 -->
+<changeSet id="040-system_metrics" author="raj">
+<createTable tableName="system_metrics">
+    <column name="id" type="BIGINT" autoIncrement="true">
+        <constraints primaryKey="true"/>
+    </column>
+</createTable>
+</changeSet>
+
+        </databaseChangeLog>
