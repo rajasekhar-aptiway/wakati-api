@@ -19,4 +19,10 @@ public interface CommissionConfigurationRepository extends JpaRepository<Commiss
     List<CommissionConfiguration> findByStatus(String status);
 
     List<CommissionConfiguration> findByUpdatedBy(String updatedBy);
+
+    Optional<CommissionConfiguration> findByTxnTypeAndChannelAndStatus(
+            String transactionType,
+            String channel,
+            String status
+    );
 }

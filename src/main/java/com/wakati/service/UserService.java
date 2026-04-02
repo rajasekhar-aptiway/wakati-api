@@ -60,7 +60,6 @@ public class UserService {
 
 
         List<UserProjection> rows = userRepository.fetchUsers(status, type);
-
         return getUserResponse(rows);
     }
 

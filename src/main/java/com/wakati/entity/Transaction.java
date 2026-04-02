@@ -5,6 +5,7 @@ import com.wakati.enums.TransactionType;
 import com.wakati.enums.TxnCategory;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,7 +41,7 @@ public class Transaction extends BaseCreatedAtEntity{
     @JoinColumn(name = "target_user_id", referencedColumnName = "user_id")
     private User targetUser;
 
-    private String amount;
+    private BigDecimal amount;
     private String remarks;
     private String parentTxnId;
     private String status;
@@ -114,11 +115,11 @@ public class Transaction extends BaseCreatedAtEntity{
         this.targetUser = targetUser;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

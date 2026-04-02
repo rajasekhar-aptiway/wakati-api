@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -166,7 +167,7 @@ public class UserRegistrationService {
         wallet.setWalletId(UUID.randomUUID().toString());
         wallet.setOwnerType(OwnerType.USER);
         wallet.setOwner(user);
-        wallet.setBalance("0");
+        wallet.setBalance(BigDecimal.ZERO);
         wallet.setStatus(WalletStatus.BLOCKED);
 
         walletRepository.save(wallet);
