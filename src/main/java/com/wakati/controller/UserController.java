@@ -5,6 +5,7 @@ import com.wakati.enums.UserType;
 import com.wakati.model.request.ChangePasswordRequest;
 import com.wakati.model.request.DTO.FetchRequestDTO;
 import com.wakati.model.request.UserRegistrationRequest;
+import com.wakati.service.GetUserService;
 import com.wakati.service.UserRegistrationService;
 import com.wakati.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRegistrationService service;
+
+    @Autowired
+    private GetUserService getUserService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserRegistrationRequest request) {
@@ -59,5 +63,15 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
         return ResponseEntity.ok(userService.changePassword(request));
+    }
+
+    @GetMapping("/get_user_mobile_no")
+    public ResponseEntity<?> getUserByMobileNo(@RequestParam(value="mobile_no") String mobile_no) {
+        return ResponseEntity.ok(getUserService.getUserByMobileNo(mobile_no));
+    }
+
+    @GetMapping("/get_profile_status")
+    public ResponseEntity<?> getProfileStatus(@RequestParam(value="mobile_no") String mobile_no) {
+        return ResponseEntity.ok(getUserService.getProfileStatus(mobile_no));
     }
 }
