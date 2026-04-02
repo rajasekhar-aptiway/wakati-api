@@ -12,16 +12,25 @@ import com.wakati.model.response.ResponseBuilder;
 import com.wakati.repository.UserCredentialsRepository;
 import com.wakati.repository.UserDocumentsRepository;
 import com.wakati.repository.UserRepository;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -106,6 +115,83 @@ public class CustomerDocumentService {
                 "userId", userId,
                 "documentNumber", documentNumber
         ));
+    }
+
+    public ResponseEntity<?> viewDocument(String documentId) {
+
+        if (documentId == null || documentId.isBlank()) {
+            throw new RuntimeException("document_id is required");
+        }
+
+        // ✅ FETCH DOCUMENT
+        UserDocuments doc = documentRepo
+                .findByDocumentIdAndNotExpired(documentId)
+                .orElseThrow(() -> new RuntimeException("Document not found"));
+
+        String docUserId = doc.getUser().getUserId();
+        String relativePath = doc.getDocumentUrl(); // kycdata/{userId}/{file}
+
+        // =====================================================
+        // ✅ RESOLVE FILE PATH
+        // =====================================================
+        String base = System.getenv("KYC_STORAGE_PATH");
+        if (base == null) {
+            base = System.getProperty("user.dir") + "/kycdata";
+        }
+
+        Path basePath = Paths.get(base).toAbsolutePath().normalize();
+
+        // remove "kycdata/" prefix
+        String cleanPath = relativePath.replaceFirst("^kycdata/", "");
+
+        Path filePath = basePath.resolve(cleanPath).normalize();
+
+        // 🔥 Path traversal protection
+        if (!filePath.startsWith(basePath)) {
+            throw new RuntimeException("Access denied");
+        }
+
+        File file = filePath.toFile();
+
+        if (!file.exists()) {
+            throw new RuntimeException("File not found");
+        }
+
+        // =====================================================
+        // ✅ MIME TYPE
+        // =====================================================
+        String mime = getMimeType(file.getName());
+
+        UrlResource resource;
+        try {
+            resource = new UrlResource(file.toURI());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("File error");
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(mime))
+                .contentLength(file.length())
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + file.getName() + "\"")
+                .header(HttpHeaders.CACHE_CONTROL, "no-store")
+                .header("X-Content-Type-Options", "nosniff")
+                .body(resource);
+    }
+
+    private String getMimeType(String fileName) {
+
+        String ext = fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+
+        return switch (ext) {
+            case "jpg", "jpeg" -> "image/jpeg";
+            case "png" -> "image/png";
+            case "gif" -> "image/gif";
+            case "pdf" -> "application/pdf";
+            case "doc" -> "application/msword";
+            case "docx" -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            default -> "application/octet-stream";
+        };
     }
 
     private String getExtension(String filename) {

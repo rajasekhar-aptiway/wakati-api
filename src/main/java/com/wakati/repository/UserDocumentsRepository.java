@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserDocumentsRepository extends JpaRepository<UserDocuments, Integer> {
@@ -37,4 +38,11 @@ public interface UserDocumentsRepository extends JpaRepository<UserDocuments, In
         AND d.verificationStatus IN ('PENDING','REJECTED','APPROVED')
     """)
     void expireDocuments(@Param("userId") String userId);
+
+    @Query("""
+        SELECT d FROM UserDocuments d
+        WHERE d.documentId = :documentId
+        AND d.verificationStatus <> 'EXPIRED'
+    """)
+    Optional<UserDocuments> findByDocumentIdAndNotExpired(@Param("documentId") String documentId);
 }
