@@ -6,200 +6,295 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
+    <!-- TRANSACTIONS -->
+    <changeSet id="021-transactions" author="raj">
+        <createTable tableName="transactions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_id" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="txn_type" type="VARCHAR(50)"/>
+            <column name="channel" type="VARCHAR(50)"/>
+            <column name="source_user_id" type="VARCHAR(100)"/>
+            <column name="target_user_id" type="VARCHAR(100)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-<!-- 21 -->
-<changeSet id="021-transactions" author="raj">
-<createTable tableName="transactions">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="txn_id" type="VARCHAR(100)">
-        <constraints unique="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- WALLET -->
+    <changeSet id="022-wallet" author="raj">
+        <createTable tableName="wallet">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="wallet_id" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="owner_id" type="VARCHAR(100)"/>
+            <column name="currency" type="VARCHAR(10)"/>
+            <column name="balance" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 22 -->
-<changeSet id="022-wallet" author="raj">
-<createTable tableName="wallet">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="balance" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- WALLET LEDGER -->
+    <changeSet id="023-wallet-ledger" author="raj">
+        <createTable tableName="wallet_ledger">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_id" type="VARCHAR(100)"/>
+            <column name="wallet_id" type="VARCHAR(100)"/>
+            <column name="entry_type" type="VARCHAR(50)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="balance_before" type="DECIMAL(18,2)"/>
+            <column name="balance_after" type="DECIMAL(18,2)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 23 -->
-<changeSet id="023-wallet_ledger" author="raj">
-<createTable tableName="wallet_ledger">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- CASH -->
+    <changeSet id="024-cash" author="raj">
+        <createTable tableName="cash">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="balance" type="DECIMAL(18,2)"/>
+            <column name="currency" type="VARCHAR(10)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 24 -->
-<changeSet id="024-cash" author="raj">
-<createTable tableName="cash">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="balance" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- CASH LEDGER -->
+    <changeSet id="025-cash-ledger" author="raj">
+        <createTable tableName="cash_ledger">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_id" type="VARCHAR(100)"/>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="entry_type" type="VARCHAR(50)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="balance_before" type="DECIMAL(18,2)"/>
+            <column name="balance_after" type="DECIMAL(18,2)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 25 -->
-<changeSet id="025-cash_ledger" author="raj">
-<createTable tableName="cash_ledger">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- PAY REQUEST -->
+    <changeSet id="026-pay-request" author="raj">
+        <createTable tableName="pay_request">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="request_id" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="sender_id" type="VARCHAR(100)"/>
+            <column name="receiver_id" type="VARCHAR(100)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- continue pattern -->
+    <!-- COLLECTION REQUEST -->
+    <changeSet id="027-collection-request" author="raj">
+        <createTable tableName="collection_request">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="request_id" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="collector_id" type="VARCHAR(100)"/>
+            <column name="customer_id" type="VARCHAR(100)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 26 -->
-<changeSet id="026-pay_request" author="raj">
-<createTable tableName="pay_request">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- COMMISSION CONFIG -->
+    <changeSet id="028-commission-config" author="raj">
+        <createTable tableName="commission_configuration">
+            <column name="id" type="VARCHAR(100)">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_type" type="VARCHAR(50)"/>
+            <column name="channel" type="VARCHAR(50)"/>
+            <column name="commission_percent" type="DECIMAL(5,2)"/>
+            <column name="platform_percent" type="DECIMAL(5,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 27 -->
-<changeSet id="027-collection_request" author="raj">
-<createTable tableName="collection_request">
-    <column name="id" type="INT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- BULK TRANSFER -->
+    <changeSet id="029-bulk-transfer" author="raj">
+        <createTable tableName="bulk_transfer_batch">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="batch_id" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="total_amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 28 -->
-<changeSet id="028-commission_configuration" author="raj">
-<createTable tableName="commission_configuration">
-    <column name="id" type="VARCHAR(100)">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="percent" type="DECIMAL(5,2)"/>
-</createTable>
-</changeSet>
+    <!-- TREASURY -->
+    <changeSet id="030-treasury" author="raj">
+        <createTable tableName="treasury_actions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="action_type" type="VARCHAR(50)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 29 -->
-<changeSet id="029-bulk_transfer_batch" author="raj">
-<createTable tableName="bulk_transfer_batch">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- ================= REMAINING TABLES ================= -->
 
-        <!-- 30 -->
-<changeSet id="030-treasury_actions" author="raj">
-<createTable tableName="treasury_actions">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 31 -->
+    <changeSet id="031-dealer-security-deposits" author="raj">
+        <createTable tableName="dealer_security_deposits">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="dealer_id" type="VARCHAR(100)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 31 -->
-<changeSet id="031-dealer_security_deposits" author="raj">
-<createTable tableName="dealer_security_deposits">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- 32 -->
+    <changeSet id="032-dealer-assignment" author="raj">
+        <createTable tableName="dealer_assignment">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="dealer_id" type="VARCHAR(100)"/>
+            <column name="assigned_to" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 32 -->
-<changeSet id="032-dealer_assignment" author="raj">
-<createTable tableName="dealer_assignment">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 33 -->
+    <changeSet id="033-dealer-cumulative-stats" author="raj">
+        <createTable tableName="dealer_cumulative_stats">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="dealer_id" type="VARCHAR(100)"/>
+            <column name="total_transactions" type="BIGINT"/>
+            <column name="total_amount" type="DECIMAL(18,2)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 33 -->
-<changeSet id="033-dealer_cumulative_stats" author="raj">
-<createTable tableName="dealer_cumulative_stats">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 34 -->
+    <changeSet id="034-customer-transfer-limits" author="raj">
+        <createTable tableName="customer_transfer_limits">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="daily_limit" type="DECIMAL(18,2)"/>
+            <column name="monthly_limit" type="DECIMAL(18,2)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 34 -->
-<changeSet id="034-customer_transfer_limits" author="raj">
-<createTable tableName="customer_transfer_limits">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 35 -->
+    <changeSet id="035-customer-closure-request" author="raj">
+        <createTable tableName="customer_closure_request">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="reason" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 35 -->
-<changeSet id="035-customer_closure_request" author="raj">
-<createTable tableName="customer_closure_request">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 36 -->
+    <changeSet id="036-platform-fees" author="raj">
+        <createTable tableName="platform_fees">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_id" type="VARCHAR(100)"/>
+            <column name="fee_amount" type="DECIMAL(18,2)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 36 -->
-<changeSet id="036-platform_fees" author="raj">
-<createTable tableName="platform_fees">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-    <column name="amount" type="DECIMAL(18,2)"/>
-</createTable>
-</changeSet>
+    <!-- 37 -->
+    <changeSet id="037-ledger-audit" author="raj">
+        <createTable tableName="ledger_audit">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="entity_type" type="VARCHAR(50)"/>
+            <column name="entity_id" type="VARCHAR(100)"/>
+            <column name="action" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 37 -->
-<changeSet id="037-ledger_audit" author="raj">
-<createTable tableName="ledger_audit">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 38 -->
+    <changeSet id="038-notification-queue" author="raj">
+        <createTable tableName="notification_queue">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="message" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 38 -->
-<changeSet id="038-notification_queue" author="raj">
-<createTable tableName="notification_queue">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 39 -->
+    <changeSet id="039-webhook-events" author="raj">
+        <createTable tableName="webhook_events">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="event_type" type="VARCHAR(50)"/>
+            <column name="payload" type="CLOB"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 39 -->
-<changeSet id="039-webhook_events" author="raj">
-<createTable tableName="webhook_events">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
+    <!-- 40 -->
+    <changeSet id="040-system-metrics" author="raj">
+        <createTable tableName="system_metrics">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="metric_name" type="VARCHAR(100)"/>
+            <column name="metric_value" type="DECIMAL(18,2)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
 
-        <!-- 40 -->
-<changeSet id="040-system_metrics" author="raj">
-<createTable tableName="system_metrics">
-    <column name="id" type="BIGINT" autoIncrement="true">
-        <constraints primaryKey="true"/>
-    </column>
-</createTable>
-</changeSet>
-
-        </databaseChangeLog>
+</databaseChangeLog>

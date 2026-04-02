@@ -15,4 +15,24 @@
 
     </changeSet>
 
+    <changeSet id="regions-insert-001" author="rajasekhar" context="dev">
+        <sqlFile
+                path="db/changelog/sql/regions-insert.sql"
+                relativeToChangelogFile="false"
+                splitStatements="true"
+                endDelimiter=";"
+                stripComments="true"/>
+
+    </changeSet>
+
+    <changeSet id="users-insert-001" author="rajasekhar" context="dev">
+        <sqlFile
+                path="db/changelog/sql/users-insert.sql"
+                relativeToChangelogFile="false"
+                splitStatements="true"
+                endDelimiter=";"
+                stripComments="true"/>
+
+    </changeSet>
+
 </databaseChangeLog>

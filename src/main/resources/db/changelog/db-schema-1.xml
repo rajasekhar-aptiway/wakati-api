@@ -6,98 +6,178 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <!-- 1 -->
     <changeSet id="001-regions" author="raj">
         <createTable tableName="regions">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="code" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
             <column name="island" type="VARCHAR(100)"/>
+            <column name="region_en" type="VARCHAR(100)"/>
+            <column name="region_fr" type="VARCHAR(100)"/>
+            <column name="region_km" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 2 -->
+    <!-- ISLANDS -->
     <changeSet id="002-islands" author="raj">
         <createTable tableName="islands">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="code" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="code" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="name_en" type="VARCHAR(100)"/>
+            <column name="name_fr" type="VARCHAR(100)"/>
+            <column name="name_km" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 3 -->
+    <!-- USERS -->
     <changeSet id="003-users" author="raj">
         <createTable tableName="users">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="user_id" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
             <column name="user_type" type="VARCHAR(50)"/>
-            <column name="mobile_no" type="VARCHAR(100)"><constraints unique="true"/></column>
-            <column name="email" type="VARCHAR(100)"><constraints unique="true"/></column>
+            <column name="full_name" type="VARCHAR(100)"/>
+            <column name="mobile_no" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="island" type="VARCHAR(100)"/>
             <column name="region" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="registration_stage" type="VARCHAR(100)"/>
+            <column name="managed_by_type" type="VARCHAR(50)"/>
+            <column name="managed_by_id" type="VARCHAR(100)"/>
+            <column name="created_by" type="VARCHAR(100)"/>
+            <column name="session_token" type="VARCHAR(64)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="last_login" type="VARCHAR(100)"/>
+            <column name="verified_by_admin" type="VARCHAR(20)"/>
+            <column name="admin_id" type="VARCHAR(100)"/>
+            <column name="verified_by_adjudicator" type="VARCHAR(20)"/>
+            <column name="adjudicator_id" type="VARCHAR(100)"/>
+            <column name="fcm_token" type="VARCHAR(200)"/>
+            <column name="rejected_reason" type="VARCHAR(100)"/>
+            <column name="verified_at" type="TIMESTAMP"/>
+            <column name="preferred_language" type="VARCHAR(5)"/>
         </createTable>
+
+        <addForeignKeyConstraint baseTableName="users"
+                                 baseColumnNames="region"
+                                 referencedTableName="regions"
+                                 referencedColumnNames="code"
+                                 constraintName="fk_users_region"/>
     </changeSet>
 
-    <!-- 4 -->
-    <changeSet id="004-user_credentials" author="raj">
+    <!-- USER CREDENTIALS -->
+    <changeSet id="004-user-credentials" author="raj">
         <createTable tableName="user_credentials">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="password" type="VARCHAR(255)"/>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="salt" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 5 -->
-    <changeSet id="005-user_documents" author="raj">
+    <!-- USER DOCUMENTS -->
+    <changeSet id="005-user-documents" author="raj">
         <createTable tableName="user_documents">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="doc_type" type="VARCHAR(50)"/>
+            <column name="doc_url" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 6 -->
-    <changeSet id="006-session_log" author="raj">
+    <!-- SESSION LOG -->
+    <changeSet id="006-session-log" author="raj">
         <createTable tableName="session_log">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
+            <column name="session_token" type="VARCHAR(64)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 7 -->
-    <changeSet id="007-refresh_tokens" author="raj">
+    <!-- REFRESH TOKENS -->
+    <changeSet id="007-refresh-tokens" author="raj">
         <createTable tableName="refresh_tokens">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="token" type="VARCHAR(255)"/>
+            <column name="expiry" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 8 -->
-    <changeSet id="008-otp_challenges" author="raj">
+    <!-- OTP -->
+    <changeSet id="008-otp" author="raj">
         <createTable tableName="otp_challenges">
-            <column name="id" type="INT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="otp" type="VARCHAR(50)"/>
+            <column name="purpose" type="VARCHAR(50)"/>
+            <column name="expires_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 9 -->
-    <changeSet id="009-security_event_log" author="raj">
+    <!-- SECURITY EVENTS -->
+    <changeSet id="009-security-events" author="raj">
         <createTable tableName="security_event_log">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
+            <column name="event_type" type="VARCHAR(50)"/>
+            <column name="trace_id" type="VARCHAR(64)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 10 -->
+    <!-- NOTIFICATIONS -->
     <changeSet id="010-notifications" author="raj">
         <createTable tableName="notifications">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="message" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(50)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 11 -->
-    <changeSet id="011-i18n_messages" author="raj">
+    <!-- I18N -->
+    <changeSet id="011-i18n" author="raj">
         <createTable tableName="i18n_messages">
             <column name="message_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
@@ -109,8 +189,8 @@
         </createTable>
     </changeSet>
 
-    <!-- 12 -->
-    <changeSet id="012-email_templates" author="raj">
+    <!-- EMAIL TEMPLATE -->
+    <changeSet id="012-email-template" author="raj">
         <createTable tableName="email_templates">
             <column name="template_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
@@ -118,12 +198,13 @@
             <column name="language" type="VARCHAR(10)">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="subject" type="VARCHAR(255)"/>
             <column name="body" type="CLOB"/>
         </createTable>
     </changeSet>
 
-    <!-- 13 -->
-    <changeSet id="013-sms_templates" author="raj">
+    <!-- SMS TEMPLATE -->
+    <changeSet id="013-sms-template" author="raj">
         <createTable tableName="sms_templates">
             <column name="template_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
@@ -135,13 +216,18 @@
         </createTable>
     </changeSet>
 
-    <!-- 14 -->
-    <changeSet id="014-rate_limits" author="raj">
+    <!-- RATE LIMIT -->
+    <changeSet id="014-rate-limit" author="raj">
         <createTable tableName="rate_limits">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
             <column name="endpoint" type="VARCHAR(100)"/>
+            <column name="key_type" type="VARCHAR(50)"/>
+            <column name="key_value" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
+
 
     <!-- 15 -->
     <changeSet id="015-disputes" author="raj">
