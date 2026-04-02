@@ -239,4 +239,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 """, nativeQuery = true)
     List<UserProjection> findDashboardData(@Param("userId") String userId);
 
+    @Query("""
+        SELECT COUNT(u) > 0
+        FROM User u
+        WHERE u.userId = :dealerId
+        AND u.managedById = :parentId
+    """)
+    boolean existsDealerAssignment(
+            @Param("parentId") String parentId,
+            @Param("dealerId") String dealerId
+    );
+
 }
