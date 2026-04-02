@@ -21,6 +21,9 @@
             <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+        <addUniqueConstraint tableName="regions" columnNames="island, region_en" constraintName="uq_regions_name_en"/>
+        <addUniqueConstraint tableName="regions" columnNames="island, region_fr" constraintName="uq_regions_name_fr"/>
+        <addUniqueConstraint tableName="regions" columnNames="island, region_km" constraintName="uq_regions_name_km"/>
     </changeSet>
 
     <!-- ISLANDS -->
@@ -37,6 +40,9 @@
             <column name="name_km" type="VARCHAR(100)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+        <addUniqueConstraint tableName="islands" columnNames="name_en" constraintName="uq_islands_name_en"/>
+        <addUniqueConstraint tableName="islands" columnNames=" name_fr" constraintName="uq_islands_name_fr"/>
+        <addUniqueConstraint tableName="islands" columnNames=" name_km" constraintName="uq_islands_name_km"/>
     </changeSet>
 
     <!-- USERS -->
@@ -93,7 +99,7 @@
             <column name="user_id" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
             <column name="pin_hash" type="VARCHAR(255)"/>
             <column name="password_algo" type="VARCHAR(100)"/>
             <column name="pin_algo" type="VARCHAR(100)"/>
@@ -107,6 +113,11 @@
             <column name="updated_at" type="TIMESTAMP"/>
 
         </createTable>
+        <addForeignKeyConstraint baseTableName="user_credentials"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_user_credentials"/>
     </changeSet>
 
     <!-- USER DOCUMENTS -->
@@ -115,12 +126,23 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="document_id" type="VARCHAR(100)"/>
             <column name="user_id" type="VARCHAR(100)"/>
-            <column name="doc_type" type="VARCHAR(50)"/>
-            <column name="doc_url" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(50)"/>
+            <column name="document_type" type="VARCHAR(50)"/>
+            <column name="document_number" type="TEXT"/>
+            <column name="document_url" type="VARCHAR(255)"/>
+            <column name="verification_status" type="VARCHAR(255)"/>
+            <column name="created_by" type="VARCHAR(100)"/>
+            <column name="verified_by" type="VARCHAR(100)"/>
+            <column name="verified_at" type="TIMESTAMP"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="user_documents"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_user_documents"/>
+
     </changeSet>
 
     <!-- SESSION LOG -->
@@ -131,8 +153,19 @@
             </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="session_token" type="VARCHAR(64)"/>
+            <column name="ip_address" type="VARCHAR(45)"/>
+            <column name="user_agent" type="VARCHAR(500)"/>
+            <column name="login_at" type="TIMESTAMP"/>
+            <column name="logout_at" type="TIMESTAMP"/>
+            <column name="logout_type" type="VARCHAR(20)"/>
+            <column name="duration_seconds" type="INT"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="session_log"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_session_user"/>
     </changeSet>
 
     <!-- REFRESH TOKENS -->
@@ -142,35 +175,65 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="VARCHAR(100)"/>
-            <column name="token" type="VARCHAR(255)"/>
-            <column name="expiry" type="TIMESTAMP"/>
+            <column name="token_hash" type="CHAR(64)"/>
+            <column name="expires_at" type="TIMESTAMP"/>
+            <column name="revoked" type="TINYINT"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="replaced_by" type="CHAR(64)"/>
+            <column name="last_used_at" type="TIMESTAMP"/>
+            <column name="ip" type="VARCHAR(45)"/>
+            <column name="user_agent" type="VARCHAR(255)"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="refresh_tokens"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_refresh_users"/>
     </changeSet>
 
-    <!-- OTP -->
-    <changeSet id="008-otp" author="raj">
+    <!-- OTP-CHALLENGES -->
+    <changeSet id="008-otp-challenges" author="raj">
         <createTable tableName="otp_challenges">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="otp_id" type="VARCHAR(100)"/>
             <column name="user_id" type="VARCHAR(100)"/>
-            <column name="otp" type="VARCHAR(50)"/>
+            <column name="otp" type="VARCHAR(100)"/>
             <column name="purpose" type="VARCHAR(50)"/>
+            <column name="otp_hash" type="VARCHAR(100)"/>
+            <column name="attempts" type="VARCHAR(100)"/>
+            <column name="verified" type="VARCHAR(100)"/>
             <column name="expires_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="otp_challenges"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_otp_user"/>
     </changeSet>
 
     <!-- SECURITY EVENTS -->
-    <changeSet id="009-security-events" author="raj">
+    <changeSet id="009-security-event-log" author="raj">
         <createTable tableName="security_event_log">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="event_type" type="VARCHAR(50)"/>
+            <column name="identifier" type="VARCHAR(100)"/>
+            <column name="ip_address" type="VARCHAR(45)"/>
+            <column name="user_agent" type="VARCHAR(500)"/>
             <column name="trace_id" type="VARCHAR(64)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="security_event_log"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_security_user"/>
     </changeSet>
 
     <!-- NOTIFICATIONS -->
@@ -179,15 +242,58 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="message" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(50)"/>
+            <column name="notification_id" type="VARCHAR(100)"/>
+            <column name="source_id" type="VARCHAR(100)"/>
+            <column name="target_id" type="VARCHAR(100)"/>
+            <column name="payment_mode" type="VARCHAR(100)"/>
+            <column name="type" type="VARCHAR(100)"/>
+            <column name="notification_type" type="VARCHAR(64)"/>
+            <column name="dealer_id" type="VARCHAR(100)"/>
+            <column name="receiver_id" type="VARCHAR(100)"/>
+            <column name="super_dealer_id" type="VARCHAR(100)"/>
+            <column name="partner_agent_id" type="VARCHAR(100)"/>
+            <column name="island" type="VARCHAR(100)"/>
+            <column name="workflow_status" type="VARCHAR(100)"/>
+            <column name="amount_collected" type="DECIMAL(18,2)"/>
+            <column name="pay_request_id" type="VARCHAR(100)"/>
+            <column name="collection_request_id" type="VARCHAR(100)"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="dealer_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_dealer"/>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="receiver_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_receiver"/>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="super_dealer_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_sd"/>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="source_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_source"/>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="target_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_target"/>
+        <addForeignKeyConstraint baseTableName="notifications"
+                                 baseColumnNames="partner_agent_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_notif_pa"/>
     </changeSet>
 
-    <!-- I18N -->
-    <changeSet id="011-i18n" author="raj">
+    <!-- I18N-MESSAGES -->
+    <changeSet id="011-i18n-messages" author="raj">
         <createTable tableName="i18n_messages">
             <column name="message_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
@@ -205,11 +311,16 @@
             <column name="template_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="language" type="VARCHAR(10)">
+            <column name="language" type="VARCHAR(5)">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="description" type="VARCHAR(255)"/>
             <column name="subject" type="VARCHAR(255)"/>
-            <column name="body" type="CLOB"/>
+            <column name="body" type="TEXT"/>
+            <column name="is_active" type="TINYINT(1)"/>
+            <column name="updated_by" type="VARCHAR(100)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
@@ -219,10 +330,15 @@
             <column name="template_key" type="VARCHAR(100)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="language" type="VARCHAR(10)">
+            <column name="language" type="VARCHAR(5)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="body" type="CLOB"/>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="body" type="TEXT"/>
+            <column name="is_active" type="TINYINT(1)"/>
+            <column name="updated_by" type="VARCHAR(100)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
@@ -235,62 +351,149 @@
             <column name="endpoint" type="VARCHAR(100)"/>
             <column name="key_type" type="VARCHAR(50)"/>
             <column name="key_value" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-
-    <!-- 15 -->
-    <changeSet id="015-disputes" author="raj">
-        <createTable tableName="disputes">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="txn_id" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 16 -->
-    <changeSet id="016-user_roles" author="raj">
-        <createTable tableName="user_roles">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="role" type="VARCHAR(50)"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 17 -->
-    <changeSet id="017-user_permissions" author="raj">
-        <createTable tableName="user_permissions">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="permission" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 18 -->
-    <changeSet id="018-audit_log" author="raj">
-        <createTable tableName="audit_log">
-            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
-            <column name="entity" type="VARCHAR(100)"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 19 -->
-    <changeSet id="019-config" author="raj">
-        <createTable tableName="config">
-            <column name="key" type="VARCHAR(100)">
+    <!-- TRANSACTIONS -->
+    <changeSet id="021-transactions" author="raj">
+        <createTable tableName="transactions">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="value" type="VARCHAR(255)"/>
+            <column name="txn_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="txn_category" type="VARCHAR(50)"/>
+            <column name="txn_type" type="VARCHAR(50)"/>
+            <column name="channel" type="VARCHAR(50)"/>
+            <column name="initiated_by" type="VARCHAR(255)"/>
+            <column name="source_user_id" type="VARCHAR(255)"/>
+            <column name="target_user_id" type="VARCHAR(255)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="batch_id" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="initiated_by"
+                constraintName="fk_txn_initiated"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="source_user_id"
+                constraintName="fk_txn_source"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="transactions"
+                baseColumnNames="target_user_id"
+                constraintName="fk_txn_target"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+    </changeSet>
+
+    <!-- TRANSACTION-DISPUTES  -->
+    <changeSet id="015-transaction-disputes" author="raj">
+        <createTable tableName="transaction_disputes">
+            <column name="dispute_id" type="VARCHAR(100)">
+            <constraints primaryKey="true"/>
+            </column>
+            <column name="txn_id" type="VARCHAR(100)"/>
+            <column name="raised_by" type="VARCHAR(100)"/>
+            <column name="reason" type="CLOB"/>
+            <column name="status" type="VARCHAR(20)"/>
+            <column name="resolved_by" type="VARCHAR(100)"/>
+            <column name="resolution" type="TEXT"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="transaction_disputes"
+                                 baseColumnNames="txn_id"
+                                 referencedTableName="transactions"
+                                 referencedColumnNames="txn_id"
+                                 constraintName="fk_dispute_txn"/>
+        <addForeignKeyConstraint baseTableName="transaction_disputes"
+                                 baseColumnNames="raised_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_dispute_raised"/>
+        <addForeignKeyConstraint baseTableName="transaction_disputes"
+                                 baseColumnNames="resolved_by"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_dispute_resolved"/>
+    </changeSet>
+
+    <!-- SECURITY DEPOSITS -->
+    <changeSet id="016-security-deposits" author="raj">
+        <createTable tableName="security_deposits">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="code" type="VARCHAR(100)"/>
+            <column name="type_of_dealer" type="VARCHAR(100)"/>
+            <column name="description" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
-    <!-- 20 -->
-    <changeSet id="020-platform_account" author="raj">
+
+    <!-- USER-ATTRIBUTES -->
+    <changeSet id="017-user-attributes" author="raj">
+        <createTable tableName="user_attributes">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="attribute_id" type="VARCHAR(100)"/>
+            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="attribute_key" type="VARCHAR(100)"/>
+            <column name="attribute_value" type="VARCHAR(100)"/>
+            <column name="created_by" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="user_attributes"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="user_id"
+                                 constraintName="fk_user_attributes"/>
+    </changeSet>
+
+
+    <!-- ADMIN-ACTION-LOG -->
+    <changeSet id="018-admin_action_log" author="raj">
+        <createTable tableName="admin_action_log">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true"/></column>
+            <column name="performed_by" type="VARCHAR(100)"/>
+            <column name="action_type" type="VARCHAR(50)"/>
+            <column name="target_user_id" type="VARCHAR(50)"/>
+            <column name="details" type="CLOB"/>
+            <column name="ip_address" type="VARCHAR(45)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+
+    <!-- PLATFORM-ACCOUNT -->
+    <changeSet id="019-platform_account" author="raj">
         <createTable tableName="platform_account">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="platform_id" type="VARCHAR(100)"/>
+            <column name="account_code" type="VARCHAR(100)"/>
             <column name="balance" type="DECIMAL(18,2)"/>
+            <column name="description" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
     </changeSet>
 
 </databaseChangeLog>

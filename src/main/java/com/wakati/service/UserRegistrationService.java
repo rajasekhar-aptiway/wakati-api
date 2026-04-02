@@ -84,11 +84,17 @@ public class UserRegistrationService {
         User user = new User();
         user.setUserId(userId);
         user.setUserType(request.getUserType());
-        user.setMobileNo("269"+request.getMobileNo());
+        if(request.getMobileNo() != null && request.getMobileNo().length() == 7) {
+            user.setMobileNo("269" + request.getMobileNo());
+        }
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
         user.setIsland(request.getIsland());
-        user.setStatus(Status.DRAFT);
+        if (user.getUserType() .equals(UserType.CUSTOMER)) {
+            user.setStatus(Status.DRAFT);
+        }else {
+            user.setStatus(Status.APPROVED);
+        }
         user.setRegistrationStage(RegistrationStage.MOBILE_VERIFICATION_PENDING);
         user.setManagedByType(ManagedByType.PLATFORM);
         user.setPreferredLanguage("en");

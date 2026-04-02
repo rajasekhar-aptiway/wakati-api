@@ -120,13 +120,13 @@ public class CustomerDocumentService {
     public ResponseEntity<?> viewDocument(String documentId) {
 
         if (documentId == null || documentId.isBlank()) {
-            throw new RuntimeException("document_id is required");
+            throw new WakatiException(DOCUMENT_ID_REQUIRED);
         }
 
         // ✅ FETCH DOCUMENT
         UserDocuments doc = documentRepo
                 .findByDocumentIdAndNotExpired(documentId)
-                .orElseThrow(() -> new RuntimeException("Document not found"));
+                .orElseThrow(() -> new WakatiException(DOCUMENT_NOT_FOUND));
 
         String docUserId = doc.getUser().getUserId();
         String relativePath = doc.getDocumentUrl(); // kycdata/{userId}/{file}
@@ -148,13 +148,13 @@ public class CustomerDocumentService {
 
         // 🔥 Path traversal protection
         if (!filePath.startsWith(basePath)) {
-            throw new RuntimeException("Access denied");
+            throw new WakatiException(ACCESS_DENIED);
         }
 
         File file = filePath.toFile();
 
         if (!file.exists()) {
-            throw new RuntimeException("File not found");
+            throw new WakatiException(FILE_NOT_FOUND);
         }
 
         // =====================================================
@@ -166,7 +166,7 @@ public class CustomerDocumentService {
         try {
             resource = new UrlResource(file.toURI());
         } catch (MalformedURLException e) {
-            throw new RuntimeException("File error");
+            throw new WakatiException(FILE_NOT_FOUND);
         }
 
         return ResponseEntity.ok()
