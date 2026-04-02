@@ -1,6 +1,7 @@
 package com.wakati.config;
 
 import com.wakati.I18NConstants;
+import com.wakati.constant.AppConstants;
 import com.wakati.entity.User;
 import com.wakati.enums.Status;
 import com.wakati.service.JwtService;
@@ -11,6 +12,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -41,7 +44,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String token = JwtUtils.getBearerToken(request);
+            String traceId = request.getHeader(AppConstants.HEADER_NAME);
 
+            if (traceId == null || traceId.isBlank()) {
+                traceId = UUID.randomUUID().toString();
+            }
             // ✅ 1. Token missing
             if (token == null) {
                 sendError(response, 401, messageService.get(I18NConstants.AUTHORIZATION_REQUIRED));
@@ -101,9 +108,15 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
 
+                // ✅ Add to MDC (for logging)
+            MDC.put(AppConstants.TRACE_ID, traceId);
+
+                // ✅ Add to response header
+            response.setHeader(AppConstants.HEADER_NAME, traceId);
             filterChain.doFilter(request, response);
         } finally {
-            UserContextHolder.clear(); // 🔥 critical
+            UserContextHolder.clear();
+            MDC.clear();// 🔥 critical
         }
     }
 
