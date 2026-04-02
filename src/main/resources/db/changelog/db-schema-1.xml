@@ -94,8 +94,18 @@
                 <constraints nullable="false"/>
             </column>
             <column name="password_hash" type="VARCHAR(255)"/>
+            <column name="pin_hash" type="VARCHAR(255)"/>
+            <column name="password_algo" type="VARCHAR(100)"/>
+            <column name="pin_algo" type="VARCHAR(100)"/>
             <column name="salt" type="VARCHAR(255)"/>
+            <column name="password_updated_at" type="VARCHAR(100)"/>
+            <column name="pin_updated_at" type="VARCHAR(100)"/>
+            <column name="failed_attempts" type="VARCHAR(100)"/>
+            <column name="locked_until" type="VARCHAR(100)"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="created_by" type="VARCHAR(100)"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+
         </createTable>
     </changeSet>
 
