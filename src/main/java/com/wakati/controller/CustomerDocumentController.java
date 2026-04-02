@@ -1,6 +1,8 @@
 package com.wakati.controller;
 
 import com.wakati.service.CustomerDocumentService;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,7 @@ import java.util.Map;
 public class CustomerDocumentController {
 
     @Autowired
-    private CustomerDocumentService service;
+    private CustomerDocumentService documentService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadDocuments(
@@ -27,8 +29,17 @@ public class CustomerDocumentController {
         Map<String, MultipartFile> files = request.getFileMap();
 
         return ResponseEntity.ok(
-                service.uploadDocuments(userId, documentNumber, pin, files)
+                documentService.uploadDocuments(userId, documentNumber, pin, files)
         );
+    }
+
+
+
+    @GetMapping("/view")
+    public ResponseEntity<?> viewDocument(
+            @RequestParam("document_id") String documentId
+    ) {
+        return documentService.viewDocument(documentId);
     }
 
 }
