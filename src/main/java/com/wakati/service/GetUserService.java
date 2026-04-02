@@ -1,6 +1,7 @@
 package com.wakati.service;
 
 import com.wakati.I18NConstants;
+import com.wakati.entity.Wallet;
 import com.wakati.exception.WakatiException;
 import com.wakati.model.response.ResponseBuilder;
 import com.wakati.model.response.UserProjection;
@@ -10,6 +11,7 @@ import com.wakati.repository.WalletRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -41,9 +43,9 @@ public class GetUserService {
         UserProjection first = rows.get(0);
 
         // ✅ Wallet Balance
-        Double walletBalance = walletRepository.findByOwner_UserId(first.getUserId())
-                .map(w -> Double.parseDouble(w.getBalance()))
-                .orElse(0.0);
+        BigDecimal walletBalance = walletRepository.findByOwner_UserId(first.getUserId())
+                .map(Wallet::getBalance)
+                .orElse(BigDecimal.ZERO);
 
         // ✅ Build Response
         UserResponse response = UserResponse.builder()
@@ -78,7 +80,7 @@ public class GetUserService {
 
         if ("DEALER".equalsIgnoreCase(response.getUserType())
                 && "CLOSED".equalsIgnoreCase(response.getStatus().name())
-                && walletBalance > 0) {
+                && walletBalance.compareTo(BigDecimal.ZERO) > 0) {
 
             suggestedAction = Map.of(
                     "txn_type", "SECURITY_DEPOSIT_WITHDRAWAL",

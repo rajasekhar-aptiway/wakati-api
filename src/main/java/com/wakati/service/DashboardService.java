@@ -3,6 +3,7 @@ package com.wakati.service;
 import com.wakati.I18NConstants;
 import com.wakati.config.UserContextHolder;
 import com.wakati.entity.User;
+import com.wakati.entity.Wallet;
 import com.wakati.enums.TransactionType;
 import com.wakati.exception.WakatiException;
 import com.wakati.model.response.ResponseBuilder;
@@ -12,6 +13,7 @@ import com.wakati.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -86,9 +88,9 @@ public class DashboardService {
         String userType = first.getUserType();
 
         // ✅ Wallet
-        double walletBalance = walletRepository.findByOwner_UserId(userId)
-                .map(w -> Double.parseDouble(w.getBalance()))
-                .orElse(0.0);
+        BigDecimal walletBalance = walletRepository.findByOwner_UserId(userId)
+                .map(Wallet::getBalance)
+                .orElse(BigDecimal.ZERO);
 
         // ✅ Cash
         Double cash = cashRepository.getCashBalance(userId);
