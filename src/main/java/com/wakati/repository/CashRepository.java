@@ -25,5 +25,9 @@ public interface CashRepository extends JpaRepository<Cash, Long> {
     Cash lockByUserId(@Param("userId") String userId);
 
 
+    @Query("SELECT COALESCE(SUM(c.balance),0) FROM Cash c")
+    Double getPlatformBalance();
+
+
 
 }

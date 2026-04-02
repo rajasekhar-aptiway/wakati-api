@@ -120,6 +120,26 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 """)
     List<TransactionProjection> fetchCashLedger(@Param("userId") String userId);
 
+    @Query("""
+        SELECT COALESCE(SUM(t.amount),0)
+        FROM Transaction t
+        WHERE t.txnType = :type
+        AND t.sourceUser.userId = :userId
+        AND DATE(t.createdAt) = CURRENT_DATE
+    """)
+    Double getTodayAmount(@Param("type") TransactionType type,
+                          @Param("userId") String userId);
+
+    @Query("""
+        SELECT COALESCE(SUM(t.amount),0)
+        FROM Transaction t
+        WHERE t.sourceUser.userId = :userId
+        AND t.txnType = 'COMMISSION'
+        AND FUNCTION('DATE', t.createdAt) = CURRENT_DATE
+    """)
+    Double getTodayCommission(String userId);
+
+
 //    @Query("""
 //        SELECT COALESCE(SUM(t.amount),0)
 //        FROM Transaction t

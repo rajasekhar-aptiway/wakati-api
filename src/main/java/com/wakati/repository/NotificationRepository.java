@@ -2,6 +2,7 @@ package com.wakati.repository;
 
 import com.wakati.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,5 +34,19 @@ public interface NotificationRepository extends JpaRepository<Notification,Long>
     public Optional<Notification> findByPayRequestId(String payRequestId);
 
     public Optional<Notification> findByCollectionRequestId(String collectionRequestId);
+
+    @Query("""
+        SELECT COUNT(n)
+        FROM Notification n
+        WHERE 
+        (
+            n.target.userId = :userId
+            OR n.partnerAgent.userId = :userId
+            OR n.superDealer.userId = :userId
+            OR n.dealer.userId = :userId
+        )
+        AND (n.workflowStatus IS NULL OR n.workflowStatus NOT IN ('COMPLETED','SUPERSEDED'))
+    """)
+    Long countRunning(String userId);
 
 }
