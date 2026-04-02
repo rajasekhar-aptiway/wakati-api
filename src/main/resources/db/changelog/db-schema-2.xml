@@ -6,43 +6,29 @@
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <!-- TRANSACTIONS -->
-    <changeSet id="021-transactions" author="raj">
-        <createTable tableName="transactions">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="txn_id" type="VARCHAR(100)">
-                <constraints unique="true"/>
-            </column>
-            <column name="txn_type" type="VARCHAR(50)"/>
-            <column name="channel" type="VARCHAR(50)"/>
-            <column name="source_user_id" type="VARCHAR(100)"/>
-            <column name="target_user_id" type="VARCHAR(100)"/>
-            <column name="amount" type="DECIMAL(18,2)"/>
-            <column name="status" type="VARCHAR(50)"/>
-            <column name="remarks" type="VARCHAR(255)"/>
-            <column name="created_at" type="TIMESTAMP"/>
-            <column name="updated_at" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
-
     <!-- WALLET -->
     <changeSet id="022-wallet" author="raj">
         <createTable tableName="wallet">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="wallet_id" type="VARCHAR(100)">
+            <column name="wallet_id" type="VARCHAR(255)">
                 <constraints unique="true"/>
             </column>
+            <column name="owner_type" type="VARCHAR(50)"/>
             <column name="owner_id" type="VARCHAR(100)"/>
-            <column name="currency" type="VARCHAR(10)"/>
             <column name="balance" type="DECIMAL(18,2)"/>
             <column name="status" type="VARCHAR(50)"/>
             <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="wallet"
+                baseColumnNames="owner_id"
+                constraintName="fk_wallet_owner"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- WALLET LEDGER -->
@@ -51,15 +37,28 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="txn_id" type="VARCHAR(100)"/>
-            <column name="wallet_id" type="VARCHAR(100)"/>
+            <column name="ledger_id" type="VARCHAR(255)"/>
+            <column name="txn_id" type="VARCHAR(255)"/>
+            <column name="user_id" type="VARCHAR(255)"/>
             <column name="entry_type" type="VARCHAR(50)"/>
             <column name="amount" type="DECIMAL(18,2)"/>
-            <column name="balance_before" type="DECIMAL(18,2)"/>
             <column name="balance_after" type="DECIMAL(18,2)"/>
-            <column name="remarks" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="wallet_ledger"
+                baseColumnNames="txn_id"
+                constraintName="fk_wallet_ledger_txn"
+                referencedTableName="transactions"
+                referencedColumnNames="txn_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="wallet_ledger"
+                baseColumnNames="user_id"
+                constraintName="fk_wallet_ledger_wallet"
+                referencedTableName="wallet"
+                referencedColumnNames="wallet_id"/>
     </changeSet>
 
     <!-- CASH -->
@@ -68,27 +67,49 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="location_id" type="VARCHAR(255)"/>
+            <column name="location_type" type="VARCHAR(50)"/>
+            <column name="user_id" type="VARCHAR(255)"/>
             <column name="balance" type="DECIMAL(18,2)"/>
-            <column name="currency" type="VARCHAR(10)"/>
+            <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="cash"
+                baseColumnNames="user_id"
+                constraintName="fk_cash_user"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- CASH LEDGER -->
     <changeSet id="025-cash-ledger" author="raj">
         <createTable tableName="cash_ledger">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="ledger_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="txn_id" type="VARCHAR(100)"/>
-            <column name="user_id" type="VARCHAR(100)"/>
+            <column name="txn_id" type="VARCHAR(255)"/>
+            <column name="user_id" type="VARCHAR(255)"/>
             <column name="entry_type" type="VARCHAR(50)"/>
             <column name="amount" type="DECIMAL(18,2)"/>
-            <column name="balance_before" type="DECIMAL(18,2)"/>
             <column name="balance_after" type="DECIMAL(18,2)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="cash_ledger"
+                baseColumnNames="txn_id"
+                constraintName="fk_cash_ledger_txn"
+                referencedTableName="transactions"
+                referencedColumnNames="txn_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="cash_ledger"
+                baseColumnNames="user_id"
+                constraintName="fk_cash_ledger_user"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- PAY REQUEST -->
@@ -97,16 +118,52 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="request_id" type="VARCHAR(100)">
+            <column name="pay_request_id" type="VARCHAR(255)">
                 <constraints unique="true"/>
             </column>
-            <column name="sender_id" type="VARCHAR(100)"/>
-            <column name="receiver_id" type="VARCHAR(100)"/>
-            <column name="amount" type="DECIMAL(18,2)"/>
-            <column name="status" type="VARCHAR(50)"/>
-            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="notification_id" type="VARCHAR(255)"/>
+            <column name="notification_type" type="VARCHAR(255)"/>
+            <column name="dealer_id" type="VARCHAR(255)"/>
+            <column name="super_dealer_id" type="VARCHAR(255)"/>
+            <column name="receiver_id" type="VARCHAR(255)"/>
+            <column name="island" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="amount_to_pay" type="DECIMAL(18,2)"/>
+            <column name="otp_verified_at_receiver_to_sd" type="TIMESTAMP"/>
+            <column name="otp_verified_at_sd_to_dealer" type="TIMESTAMP"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+            <column name="partner_agent_id" type="VARCHAR(255)"/>
+            <column name="otp_verified_at_receiver_to_pa" type="TIMESTAMP"/>
+            <column name="otp_verified_at_pa_to_sd" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="pay_request"
+                baseColumnNames="dealer_id"
+                constraintName="fk_pay_dealer"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint
+                baseTableName="pay_request"
+                baseColumnNames="partner_agent_id"
+                constraintName="fk_pay_pa"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="pay_request"
+                baseColumnNames="receiver_id"
+                constraintName="fk_pay_receiver"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="pay_request"
+                baseColumnNames="super_dealer_id"
+                constraintName="fk_pay_sd"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- COLLECTION REQUEST -->
@@ -115,44 +172,126 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="request_id" type="VARCHAR(100)">
+            <column name="collection_request_id" type="VARCHAR(255)">
                 <constraints unique="true"/>
             </column>
-            <column name="collector_id" type="VARCHAR(100)"/>
-            <column name="customer_id" type="VARCHAR(100)"/>
-            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="notification_id" type="VARCHAR(255)"/>
+            <column name="notification_type" type="VARCHAR(255)"/>
+            <column name="dealer_id" type="VARCHAR(255)"/>
+            <column name="super_dealer_id" type="VARCHAR(255)"/>
+            <column name="receiver_id" type="VARCHAR(255)"/>
+            <column name="partner_agent_id" type="VARCHAR(255)"/>
+            <column name="island" type="VARCHAR(255)"/>
             <column name="status" type="VARCHAR(50)"/>
+            <column name="amount_collected" type="DECIMAL(18,2)"/>
+            <column name="otp_verified_at_dealer" type="TIMESTAMP"/>
+            <column name="otp_verified_at_sd" type="TIMESTAMP"/>
+            <column name="otp_verified_at_partner_agent" type="TIMESTAMP"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="collection_request"
+                baseColumnNames="dealer_id"
+                constraintName="fk_collection_dealer"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint
+                baseTableName="collection_request"
+                baseColumnNames="partner_agent_id"
+                constraintName="fk_collection_pa"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="collection_request"
+                baseColumnNames="receiver_id"
+                constraintName="fk_collection_receiver"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="collection_request"
+                baseColumnNames="super_dealer_id"
+                constraintName="fk_collection_sd"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- COMMISSION CONFIG -->
     <changeSet id="028-commission-config" author="raj">
         <createTable tableName="commission_configuration">
-            <column name="id" type="VARCHAR(100)">
+            <column name="commission_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
             <column name="txn_type" type="VARCHAR(50)"/>
             <column name="channel" type="VARCHAR(50)"/>
-            <column name="commission_percent" type="DECIMAL(5,2)"/>
+            <column name="percent" type="DECIMAL(5,2)"/>
             <column name="platform_percent" type="DECIMAL(5,2)"/>
             <column name="status" type="VARCHAR(50)"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="updated_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addUniqueConstraint
+                tableName="commission_configuration"
+                columnNames="channel, txn_type, status"
+                constraintName="uq_commission_channel_txn"/>
     </changeSet>
 
     <!-- BULK TRANSFER -->
     <changeSet id="029-bulk-transfer" author="raj">
         <createTable tableName="bulk_transfer_batch">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="batch_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="batch_id" type="VARCHAR(100)">
-                <constraints unique="true"/>
-            </column>
+            <column name="source_user_id" type="VARCHAR(255)"/>
+            <column name="initiated_by" type="VARCHAR(255)"/>
+            <column name="requested_by" type="VARCHAR(255)"/>
+            <column name="transaction_count" type="INT"/>
             <column name="total_amount" type="DECIMAL(18,2)"/>
+            <column name="commission_mode" type="VARCHAR(50)"/>
+            <column name="commission_percentage" type="DECIMAL(5,2)"/>
+            <column name="total_commission" type="DECIMAL(5,2)"/>
+            <column name="total_debit" type="DECIMAL(5,2)"/>
+            <column name="description" type="VARCHAR(255)"/>
             <column name="status" type="VARCHAR(50)"/>
+            <column name="rows_json" type="CLOB"/>
+            <column name="reviewed_by" type="VARCHAR(255)"/>
+            <column name="reviewed_at" type="TIMESTAMP"/>
+            <column name="rejection_reason" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="bulk_transfer_batch"
+                baseColumnNames="initiated_by"
+                constraintName="fk_bulk_initiated"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint
+                baseTableName="bulk_transfer_batch"
+                baseColumnNames="requested_by"
+                constraintName="fk_bulk_requested"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="bulk_transfer_batch"
+                baseColumnNames="reviewed_by"
+                constraintName="fk_bulk_reviewed"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="bulk_transfer_batch"
+                baseColumnNames="source_user_id"
+                constraintName="fk_bulk_source"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- TREASURY -->
@@ -161,11 +300,32 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="action_type" type="VARCHAR(50)"/>
+            <column name="treasury_txn_id" type="VARCHAR(255)"/>
+            <column name="system_account_id" type="VARCHAR(255)"/>
+            <column name="txn_type" type="VARCHAR(50)"/>
             <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="reference_no" type="VARCHAR(255)"/>
+            <column name="performed_by" type="VARCHAR(255)"/>
+            <column name="approved_by" type="VARCHAR(255)"/>
             <column name="status" type="VARCHAR(50)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="treasury_actions"
+                baseColumnNames="approved_by"
+                constraintName="fk_treasury_approved"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="treasury_actions"
+                baseColumnNames="performed_by"
+                constraintName="fk_treasury_performed"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- ================= REMAINING TABLES ================= -->
@@ -173,14 +333,25 @@
     <!-- 31 -->
     <changeSet id="031-dealer-security-deposits" author="raj">
         <createTable tableName="dealer_security_deposits">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="dealer_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="dealer_id" type="VARCHAR(100)"/>
-            <column name="amount" type="DECIMAL(18,2)"/>
-            <column name="status" type="VARCHAR(50)"/>
+            <column name="code" type="VARCHAR(255)"/>
+            <column name="security_deposit_amount" type="DECIMAL(18,2)"/>
+            <column name="opening_balance" type="DECIMAL(18,2)"/>
+            <column name="created_by" type="VARCHAR(255)"/>
+            <column name="created_by_user_id" type="VARCHAR(255)"/>
+            <column name="disconnection" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="closed_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="dealer_security_deposits"
+                baseColumnNames="dealer_id"
+                constraintName="fk_dealer_security"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 32 -->
@@ -189,23 +360,57 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="assignment_id" type="VARCHAR(255)"/>
+            <column name="receiver_id" type="VARCHAR(100)"/>
             <column name="dealer_id" type="VARCHAR(100)"/>
-            <column name="assigned_to" type="VARCHAR(100)"/>
+            <column name="super_dealer_id" type="VARCHAR(100)"/>
+            <column name="status" type="VARCHAR(50)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="dealer_assignment"
+                baseColumnNames="dealer_id"
+                constraintName="fk_da_dealer"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="dealer_assignment"
+                baseColumnNames="receiver_id"
+                constraintName="fk_da_receiver"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="dealer_assignment"
+                baseColumnNames="super_dealer_id"
+                constraintName="fk_da_sd"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 33 -->
     <changeSet id="033-dealer-cumulative-stats" author="raj">
         <createTable tableName="dealer_cumulative_stats">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="dealer_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="dealer_id" type="VARCHAR(100)"/>
-            <column name="total_transactions" type="BIGINT"/>
+            <column name="cumulative_deposited" type="DECIMAL(18,2)"/>
+            <column name="cumulative_withdrawn" type="DECIMAL(18,2)"/>
+            <column name="daily_deposited" type="DECIMAL(18,2)"/>
+            <column name="daily_withdrawn" type="DECIMAL(18,2)"/>
             <column name="total_amount" type="DECIMAL(18,2)"/>
+            <column name="daily_reset_date" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="dealer_cumulative_stats"
+                baseColumnNames="dealer_id"
+                constraintName="fk_dealer_stats"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 34 -->
@@ -214,87 +419,122 @@
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="daily_limit" type="DECIMAL(18,2)"/>
-            <column name="monthly_limit" type="DECIMAL(18,2)"/>
+            <column name="customer_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="daily_transfer_limit" type="DECIMAL(18,2)"/>
+            <column name="single_transfer_limit" type="DECIMAL(18,2)"/>
+            <column name="set_by" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="customer_transfer_limits"
+                baseColumnNames="customer_id"
+                constraintName="fk_ctl_customer"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="customer_transfer_limits"
+                baseColumnNames="set_by"
+                constraintName="fk_ctl_setby"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 35 -->
     <changeSet id="035-customer-closure-request" author="raj">
         <createTable tableName="customer_closure_request">
-            <column name="id" type="BIGINT" autoIncrement="true">
+            <column name="closure_request_id" type="VARCHAR(255)">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="reason" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(50)"/>
+            <column name="customer_id" type="VARCHAR(255)"/>
+            <column name="requested_by" type="VARCHAR(255)"/>
+            <column name="requested_by_type" type="VARCHAR(255)"/>
+            <column name="status" type="VARCHAR(255)"/>
+            <column name="remarks" type="VARCHAR(255)"/>
+            <column name="approved_by" type="VARCHAR(255)"/>
+            <column name="approved_at" type="TIMESTAMP"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="customer_closure_request"
+                baseColumnNames="approved_by"
+                constraintName="fk_ccr_approved"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="customer_closure_request"
+                baseColumnNames="customer_id"
+                constraintName="fk_ccr_customer"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="customer_closure_request"
+                baseColumnNames="requested_by"
+                constraintName="fk_ccr_requested"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 36 -->
-    <changeSet id="036-platform-fees" author="raj">
-        <createTable tableName="platform_fees">
+    <changeSet id="036-cash_transaction_ledger" author="raj">
+        <createTable tableName="cash_transaction_ledger">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="txn_id" type="VARCHAR(100)"/>
-            <column name="fee_amount" type="DECIMAL(18,2)"/>
+            <column name="cash_txn_id" type="VARCHAR(255)"/>
+            <column name="from_location" type="VARCHAR(50)"/>
+            <column name="from_id" type="VARCHAR(255)"/>
+            <column name="to_location" type="VARCHAR(50)"/>
+            <column name="to_id" type="VARCHAR(255)"/>
+            <column name="amount" type="DECIMAL(18,2)"/>
+            <column name="target_balance_after" type="DECIMAL(18,2)"/>
+            <column name="source_balance_after" type="DECIMAL(18,2)"/>
+            <column name="reason_code" type="VARCHAR(255)"/>
+            <column name="reference_id" type="VARCHAR(255)"/>
             <column name="created_at" type="TIMESTAMP"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="cash_transaction_ledger"
+                baseColumnNames="from_id"
+                constraintName="fk_cash_txn_from"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="cash_transaction_ledger"
+                baseColumnNames="to_id"
+                constraintName="fk_cash_txn_to"
+                referencedTableName="users"
+                referencedColumnNames="user_id"/>
     </changeSet>
 
     <!-- 37 -->
-    <changeSet id="037-ledger-audit" author="raj">
-        <createTable tableName="ledger_audit">
+    <changeSet id="037-dealer_type_financial_config" author="raj">
+        <createTable tableName="dealer_type_financial_config">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="entity_type" type="VARCHAR(50)"/>
-            <column name="entity_id" type="VARCHAR(100)"/>
-            <column name="action" type="VARCHAR(50)"/>
+            <column name="dealer_type_id" type="VARCHAR(255)"/>
+            <column name="security_deposit" type="VARCHAR(255)"/>
+            <column name="deposit_min_limit" type="DECIMAL(18,2)"/>
+            <column name="deposit_max_limit" type="DECIMAL(18,2)"/>
+            <column name="withdrawal_min_limit" type="DECIMAL(18,2)"/>
+            <column name="withdrawal_max_limit" type="DECIMAL(18,2)"/>
+            <column name="minimum_opening_balance" type="DECIMAL(18,2)"/>
             <column name="created_at" type="TIMESTAMP"/>
+            <column name="daily_deposit_limit" type="DECIMAL(18,2)"/>
+            <column name="daily_withdrawal_limit" type="DECIMAL(18,2)"/>
         </createTable>
-    </changeSet>
 
-    <!-- 38 -->
-    <changeSet id="038-notification-queue" author="raj">
-        <createTable tableName="notification_queue">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="user_id" type="VARCHAR(100)"/>
-            <column name="message" type="VARCHAR(255)"/>
-            <column name="status" type="VARCHAR(50)"/>
-            <column name="created_at" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 39 -->
-    <changeSet id="039-webhook-events" author="raj">
-        <createTable tableName="webhook_events">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="event_type" type="VARCHAR(50)"/>
-            <column name="payload" type="CLOB"/>
-            <column name="status" type="VARCHAR(50)"/>
-            <column name="created_at" type="TIMESTAMP"/>
-        </createTable>
-    </changeSet>
-
-    <!-- 40 -->
-    <changeSet id="040-system-metrics" author="raj">
-        <createTable tableName="system_metrics">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true"/>
-            </column>
-            <column name="metric_name" type="VARCHAR(100)"/>
-            <column name="metric_value" type="DECIMAL(18,2)"/>
-            <column name="created_at" type="TIMESTAMP"/>
-        </createTable>
     </changeSet>
 
 </databaseChangeLog>
