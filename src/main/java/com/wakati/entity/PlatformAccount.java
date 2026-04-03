@@ -3,6 +3,7 @@ package com.wakati.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +16,7 @@ public class PlatformAccount extends BaseUpdatedAtEntity {
 
     private String platformId;
     private String accountCode;
-    private String balance;
+    private BigDecimal balance;
     private String description;
     private String status;
 
@@ -45,11 +46,11 @@ public class PlatformAccount extends BaseUpdatedAtEntity {
         this.accountCode = accountCode;
     }
 
-    public String getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

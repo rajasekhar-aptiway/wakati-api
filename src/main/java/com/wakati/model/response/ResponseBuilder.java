@@ -29,7 +29,7 @@ public class ResponseBuilder {
     public Map<String, Object> success(I18NConstants key, String responseKey, Object data) {
         return Map.of(
                 "code", 200,
-                "traceId",MDC.get(AppConstants.TRACE_ID),
+                "traceId",MDC.get(AppConstants.TRACE_ID) == null ? "" : MDC.get(AppConstants.TRACE_ID),
                 "message", messageService.get(key,responseKey),
                 responseKey, data
         );

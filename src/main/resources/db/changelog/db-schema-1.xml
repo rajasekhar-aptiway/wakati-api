@@ -177,7 +177,7 @@
             <column name="user_id" type="VARCHAR(100)"/>
             <column name="token_hash" type="CHAR(64)"/>
             <column name="expires_at" type="TIMESTAMP"/>
-            <column name="revoked" type="TINYINT"/>
+            <column name="revoked" type="BOOLEAN"/>
             <column name="created_at" type="TIMESTAMP"/>
             <column name="replaced_by" type="CHAR(64)"/>
             <column name="last_used_at" type="TIMESTAMP"/>

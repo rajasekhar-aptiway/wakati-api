@@ -2,6 +2,7 @@ package com.wakati.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -44,7 +45,7 @@ public class Notification extends BaseUpdatedAtEntity {
 
     private String island;
     private String workflowStatus;
-    private String amountCollected;
+    private BigDecimal amountCollected;
 
     private String payRequestId;
     private String collectionRequestId;
@@ -155,11 +156,11 @@ public class Notification extends BaseUpdatedAtEntity {
         this.workflowStatus = workflowStatus;
     }
 
-    public String getAmountCollected() {
+    public BigDecimal getAmountCollected() {
         return amountCollected;
     }
 
-    public void setAmountCollected(String amountCollected) {
+    public void setAmountCollected(BigDecimal amountCollected) {
         this.amountCollected = amountCollected;
     }
 

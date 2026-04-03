@@ -21,8 +21,8 @@ public class CommissionConfiguration extends BaseUpdatedAtEntity{
     @Enumerated(EnumType.STRING)
     private CommissionChannel channel;
 
-    private Double percent;
-    private Double platformPercent;
+    private BigDecimal percent;
+    private BigDecimal platformPercent;
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -55,19 +55,19 @@ public class CommissionConfiguration extends BaseUpdatedAtEntity{
         this.channel = channel;
     }
 
-    public Double getPercent() {
+    public BigDecimal getPercent() {
         return percent;
     }
 
-    public void setPercent(Double percent) {
+    public void setPercent(BigDecimal percent) {
         this.percent = percent;
     }
 
-    public Double getPlatformPercent() {
+    public BigDecimal getPlatformPercent() {
         return platformPercent;
     }
 
-    public void setPlatformPercent(Double platformPercent) {
+    public void setPlatformPercent(BigDecimal platformPercent) {
         this.platformPercent = platformPercent;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static com.wakati.I18NConstants.COMMISSION_CONFIG_NOT_FOUND;
 
@@ -30,9 +31,15 @@ public class CommissionService {
 
         BigDecimal amount = req.getAmount();
 
-        BigDecimal totalCommission = amount.multiply(BigDecimal.valueOf(config.getPercent() / 100.0));
+        BigDecimal totalCommission = amount.multiply(
+                config.getPercent()
+                        .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP)
+        );
 
-        BigDecimal platformShare = totalCommission.multiply (BigDecimal.valueOf(config.getPlatformPercent() / 100.0));
+        BigDecimal platformShare = totalCommission.multiply(
+                config.getPlatformPercent()
+                        .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP)
+        );
 
         BigDecimal remaining = totalCommission.subtract(platformShare);
 

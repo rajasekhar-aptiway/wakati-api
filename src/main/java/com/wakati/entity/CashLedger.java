@@ -3,6 +3,7 @@ package com.wakati.entity;
 import com.wakati.enums.EntryType;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,8 +24,8 @@ public class CashLedger extends BaseCreatedAtEntity {
     @Enumerated(EnumType.STRING)
     private EntryType entryType;
 
-    private Double amount;
-    private Double balanceAfter;
+    private BigDecimal amount;
+    private BigDecimal balanceAfter;
 
 
 
@@ -60,20 +61,19 @@ public class CashLedger extends BaseCreatedAtEntity {
         this.entryType = entryType;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Double getBalanceAfter() {
+    public BigDecimal getBalanceAfter() {
         return balanceAfter;
     }
 
-    public void setBalanceAfter(Double balanceAfter) {
+    public void setBalanceAfter(BigDecimal balanceAfter) {
         this.balanceAfter = balanceAfter;
     }
-
 }

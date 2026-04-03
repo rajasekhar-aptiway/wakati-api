@@ -4,6 +4,7 @@ import com.wakati.enums.FromLocation;
 import com.wakati.enums.ToLocation;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,9 +31,9 @@ public class CashTransactionLedger extends BaseCreatedAtEntity {
     @JoinColumn(name = "to_id", referencedColumnName = "user_id")
     private User toUser;
 
-    private String amount;
-    private String targetBalanceAfter;
-    private String sourceBalanceAfter;
+    private BigDecimal amount;
+    private BigDecimal targetBalanceAfter;
+    private BigDecimal sourceBalanceAfter;
 
     private String reasonCode;
     private String referenceId;
@@ -87,27 +88,27 @@ public class CashTransactionLedger extends BaseCreatedAtEntity {
         this.toUser = toUser;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public String getTargetBalanceAfter() {
+    public BigDecimal getTargetBalanceAfter() {
         return targetBalanceAfter;
     }
 
-    public void setTargetBalanceAfter(String targetBalanceAfter) {
+    public void setTargetBalanceAfter(BigDecimal targetBalanceAfter) {
         this.targetBalanceAfter = targetBalanceAfter;
     }
 
-    public String getSourceBalanceAfter() {
+    public BigDecimal getSourceBalanceAfter() {
         return sourceBalanceAfter;
     }
 
-    public void setSourceBalanceAfter(String sourceBalanceAfter) {
+    public void setSourceBalanceAfter(BigDecimal sourceBalanceAfter) {
         this.sourceBalanceAfter = sourceBalanceAfter;
     }
 

@@ -15,7 +15,7 @@ public class DealerAssignment extends BaseCreatedAtEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String assigmentId;
+    private String assignmentId;
 
     @ManyToOne
     private User receiver;
@@ -39,12 +39,12 @@ public class DealerAssignment extends BaseCreatedAtEntity{
         this.id = id;
     }
 
-    public String getAssigmentId() {
-        return assigmentId;
+    public String getAssignmentId() {
+        return assignmentId;
     }
 
-    public void setAssigmentId(String assigmentId) {
-        this.assigmentId = assigmentId;
+    public void setAssignmentId(String assignmentId) {
+        this.assignmentId = assignmentId;
     }
 
     public User getReceiver() {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import com.wakati.enums.RequestedByType;
 import com.wakati.enums.Status;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,8 +19,8 @@ public class CustomerTransferLimits extends BaseUpdatedAtEntity{
     @JoinColumn(name = "customer_id", referencedColumnName = "user_id")
     private User customer;
 
-    private Double dailyTransferLimit;
-    private Double singleTransferLimit;
+    private BigDecimal dailyTransferLimit;
+    private BigDecimal singleTransferLimit;
 
     @ManyToOne
     @JoinColumn(name = "set_by", referencedColumnName = "user_id")
@@ -43,19 +44,19 @@ public class CustomerTransferLimits extends BaseUpdatedAtEntity{
         this.customer = customer;
     }
 
-    public Double getDailyTransferLimit() {
+    public BigDecimal getDailyTransferLimit() {
         return dailyTransferLimit;
     }
 
-    public void setDailyTransferLimit(Double dailyTransferLimit) {
+    public void setDailyTransferLimit(BigDecimal dailyTransferLimit) {
         this.dailyTransferLimit = dailyTransferLimit;
     }
 
-    public Double getSingleTransferLimit() {
+    public BigDecimal getSingleTransferLimit() {
         return singleTransferLimit;
     }
 
-    public void setSingleTransferLimit(Double singleTransferLimit) {
+    public void setSingleTransferLimit(BigDecimal singleTransferLimit) {
         this.singleTransferLimit = singleTransferLimit;
     }
 

@@ -35,7 +35,7 @@ public class UserDocuments extends BaseCreatedAtEntity{
     private String createdBy;
 
     private String verifiedBy;
-    private String verifiedAt;
+    private LocalDateTime verifiedAt;
 
     public Integer getId() {
         return id;
@@ -110,13 +110,12 @@ public class UserDocuments extends BaseCreatedAtEntity{
         this.verifiedBy = verifiedBy;
     }
 
-    public String getVerifiedAt() {
+    public LocalDateTime getVerifiedAt() {
         return verifiedAt;
     }
 
-    public void setVerifiedAt(String verifiedAt) {
+    public void setVerifiedAt(LocalDateTime verifiedAt) {
         this.verifiedAt = verifiedAt;
     }
-
-    // Getters and Setters
+// Getters and Setters
 }

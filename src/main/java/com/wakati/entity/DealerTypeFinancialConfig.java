@@ -16,17 +16,17 @@ public class DealerTypeFinancialConfig extends BaseCreatedAtEntity {
 
     private String dealerTypeId;
 
-    private String securityDeposit;
-    private String depositMinLimit;
-    private String depositMaxLimit;
-    private String withdrawalMinLimit;
-    private String withdrawalMaxLimit;
-    private String minimumOpeningBalance;
+    private BigDecimal securityDeposit;
+    private BigDecimal depositMinLimit;
+    private BigDecimal depositMaxLimit;
+    private BigDecimal withdrawalMinLimit;
+    private BigDecimal withdrawalMaxLimit;
+    private BigDecimal minimumOpeningBalance;
 
 
 
-    private Double dailyDepositLimit;
-    private Double dailyWithdrawalLimit;
+    private BigDecimal dailyDepositLimit;
+    private BigDecimal dailyWithdrawalLimit;
 
     public Integer getId() {
         return id;
@@ -44,68 +44,67 @@ public class DealerTypeFinancialConfig extends BaseCreatedAtEntity {
         this.dealerTypeId = dealerTypeId;
     }
 
-    public String getSecurityDeposit() {
+    public BigDecimal getSecurityDeposit() {
         return securityDeposit;
     }
 
-    public void setSecurityDeposit(String securityDeposit) {
+    public void setSecurityDeposit(BigDecimal securityDeposit) {
         this.securityDeposit = securityDeposit;
     }
 
-    public String getDepositMinLimit() {
+    public BigDecimal getDepositMinLimit() {
         return depositMinLimit;
     }
 
-    public void setDepositMinLimit(String depositMinLimit) {
+    public void setDepositMinLimit(BigDecimal depositMinLimit) {
         this.depositMinLimit = depositMinLimit;
     }
 
-    public String getDepositMaxLimit() {
+    public BigDecimal getDepositMaxLimit() {
         return depositMaxLimit;
     }
 
-    public void setDepositMaxLimit(String depositMaxLimit) {
+    public void setDepositMaxLimit(BigDecimal depositMaxLimit) {
         this.depositMaxLimit = depositMaxLimit;
     }
 
-    public String getWithdrawalMinLimit() {
+    public BigDecimal getWithdrawalMinLimit() {
         return withdrawalMinLimit;
     }
 
-    public void setWithdrawalMinLimit(String withdrawalMinLimit) {
+    public void setWithdrawalMinLimit(BigDecimal withdrawalMinLimit) {
         this.withdrawalMinLimit = withdrawalMinLimit;
     }
 
-    public String getWithdrawalMaxLimit() {
+    public BigDecimal getWithdrawalMaxLimit() {
         return withdrawalMaxLimit;
     }
 
-    public void setWithdrawalMaxLimit(String withdrawalMaxLimit) {
+    public void setWithdrawalMaxLimit(BigDecimal withdrawalMaxLimit) {
         this.withdrawalMaxLimit = withdrawalMaxLimit;
     }
 
-    public String getMinimumOpeningBalance() {
+    public BigDecimal getMinimumOpeningBalance() {
         return minimumOpeningBalance;
     }
 
-    public void setMinimumOpeningBalance(String minimumOpeningBalance) {
+    public void setMinimumOpeningBalance(BigDecimal minimumOpeningBalance) {
         this.minimumOpeningBalance = minimumOpeningBalance;
     }
 
-
-    public Double getDailyDepositLimit() {
+    public BigDecimal getDailyDepositLimit() {
         return dailyDepositLimit;
     }
 
-    public void setDailyDepositLimit(Double dailyDepositLimit) {
+    public void setDailyDepositLimit(BigDecimal dailyDepositLimit) {
         this.dailyDepositLimit = dailyDepositLimit;
     }
 
-    public Double getDailyWithdrawalLimit() {
+    public BigDecimal getDailyWithdrawalLimit() {
         return dailyWithdrawalLimit;
     }
 
-    public void setDailyWithdrawalLimit(Double dailyWithdrawalLimit) {
+    public void setDailyWithdrawalLimit(BigDecimal dailyWithdrawalLimit) {
         this.dailyWithdrawalLimit = dailyWithdrawalLimit;
     }
 }

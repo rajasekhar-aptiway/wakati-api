@@ -10,7 +10,6 @@ import java.util.Optional;
 @Repository
 public interface CustomerTransferLimitsRepository extends JpaRepository<CustomerTransferLimits, Long> {
 
-
     Optional<CustomerTransferLimits> findByCustomerId(String customerId);
 
     List<CustomerTransferLimits> findBySetBy(String setBy);

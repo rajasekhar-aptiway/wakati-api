@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface DealerAssignmentRepository extends JpaRepository<DealerAssignment, Long> {
 
-    Optional<DealerAssignment> findByAssigmentId(String assigmentId);
+    Optional<DealerAssignment> findByAssignmentId(String assignmentId);
 
     Optional<DealerAssignment> findByReceiverId(String receiverId);
 

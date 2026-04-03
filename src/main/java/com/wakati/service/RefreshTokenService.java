@@ -40,7 +40,7 @@ public class RefreshTokenService {
                 .orElseThrow(() -> new WakatiException(I18NConstants.INVALID_REFRESH_TOKEN));
 
         // ❌ Already used (token reuse attack)
-        if (token.getRevoked()) {
+        if (token.isRevoked()) {
 
             repository.revokeAllByUserId(token.getUser().getUserId());
 

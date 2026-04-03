@@ -18,8 +18,8 @@ public class DealerSecurityDeposits extends BaseUpdatedAtEntity {
     @Id
     private String code;
 
-    private Double securityDepositAmount;
-    private Double openingBalance;
+    private BigDecimal securityDepositAmount;
+    private BigDecimal openingBalance;
 
     private String createdBy;
     private String createdByUserId;
@@ -44,19 +44,19 @@ public class DealerSecurityDeposits extends BaseUpdatedAtEntity {
         this.code = code;
     }
 
-    public Double getSecurityDepositAmount() {
+    public BigDecimal getSecurityDepositAmount() {
         return securityDepositAmount;
     }
 
-    public void setSecurityDepositAmount(Double securityDepositAmount) {
+    public void setSecurityDepositAmount(BigDecimal securityDepositAmount) {
         this.securityDepositAmount = securityDepositAmount;
     }
 
-    public Double getOpeningBalance() {
+    public BigDecimal getOpeningBalance() {
         return openingBalance;
     }
 
-    public void setOpeningBalance(Double openingBalance) {
+    public void setOpeningBalance(BigDecimal openingBalance) {
         this.openingBalance = openingBalance;
     }
 

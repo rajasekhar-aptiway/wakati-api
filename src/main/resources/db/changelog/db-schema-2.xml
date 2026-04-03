@@ -227,8 +227,8 @@
             </column>
             <column name="txn_type" type="VARCHAR(50)"/>
             <column name="channel" type="VARCHAR(50)"/>
-            <column name="percent" type="DECIMAL(5,2)"/>
-            <column name="platform_percent" type="DECIMAL(5,2)"/>
+            <column name="percent" type="DECIMAL(2,2)"/>
+            <column name="platform_percent" type="DECIMAL(2,2)"/>
             <column name="status" type="VARCHAR(50)"/>
             <column name="created_by" type="VARCHAR(255)"/>
             <column name="updated_by" type="VARCHAR(255)"/>
@@ -400,7 +400,6 @@
             <column name="cumulative_withdrawn" type="DECIMAL(18,2)"/>
             <column name="daily_deposited" type="DECIMAL(18,2)"/>
             <column name="daily_withdrawn" type="DECIMAL(18,2)"/>
-            <column name="total_amount" type="DECIMAL(18,2)"/>
             <column name="daily_reset_date" type="TIMESTAMP"/>
             <column name="updated_at" type="TIMESTAMP"/>
         </createTable>
@@ -524,7 +523,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="dealer_type_id" type="VARCHAR(255)"/>
-            <column name="security_deposit" type="VARCHAR(255)"/>
+            <column name="security_deposit" type="DECIMAL(18,2)"/>
             <column name="deposit_min_limit" type="DECIMAL(18,2)"/>
             <column name="deposit_max_limit" type="DECIMAL(18,2)"/>
             <column name="withdrawal_min_limit" type="DECIMAL(18,2)"/>

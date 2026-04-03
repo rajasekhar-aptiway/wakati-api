@@ -17,4 +17,11 @@ public interface SmsTemplateRepository extends JpaRepository<SmsTemplate, SmsTem
     List<SmsTemplate> findByTemplateKey(String templateKey);
 
     List<SmsTemplate> findByIsActiveTrue();
+
+
+    List<SmsTemplate> findByTemplateKeyOrderByLanguageAsc(String key);
+
+    List<SmsTemplate> findByLanguageOrderByTemplateKeyAsc(Language language);
+
+    List<SmsTemplate> findAllByOrderByTemplateKeyAscLanguageAsc();
 }

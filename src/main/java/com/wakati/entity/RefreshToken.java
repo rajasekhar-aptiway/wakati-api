@@ -19,7 +19,7 @@ public class RefreshToken  extends  BaseCreatedAtEntity{
     private String tokenHash;
     private LocalDateTime expiresAt;
 
-    private Boolean revoked;
+    private boolean revoked;
 
 
     private String replacedBy;
@@ -60,14 +60,13 @@ public class RefreshToken  extends  BaseCreatedAtEntity{
         this.expiresAt = expiresAt;
     }
 
-    public Boolean getRevoked() {
+    public boolean isRevoked() {
         return revoked;
     }
 
-    public void setRevoked(Boolean revoked) {
+    public void setRevoked(boolean revoked) {
         this.revoked = revoked;
     }
-
 
     public String getReplacedBy() {
         return replacedBy;

@@ -2,6 +2,7 @@ package com.wakati.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -14,10 +15,10 @@ public class DealerCumulativeStats extends BaseUpdatedAtEntity{
     @JoinColumn(name = "dealer_id", referencedColumnName = "user_id")
     private User dealer;
 
-    private Double cumulativeDeposited;
-    private Double cumulativeWithdrawn;
-    private Double dailyDeposited;
-    private Double dailyWithdrawn;
+    private BigDecimal cumulativeDeposited;
+    private BigDecimal cumulativeWithdrawn;
+    private BigDecimal dailyDeposited;
+    private BigDecimal dailyWithdrawn;
 
     private LocalDate dailyResetDate;
 
@@ -31,35 +32,35 @@ public class DealerCumulativeStats extends BaseUpdatedAtEntity{
         this.dealer = dealer;
     }
 
-    public Double getCumulativeDeposited() {
+    public BigDecimal getCumulativeDeposited() {
         return cumulativeDeposited;
     }
 
-    public void setCumulativeDeposited(Double cumulativeDeposited) {
+    public void setCumulativeDeposited(BigDecimal cumulativeDeposited) {
         this.cumulativeDeposited = cumulativeDeposited;
     }
 
-    public Double getCumulativeWithdrawn() {
+    public BigDecimal getCumulativeWithdrawn() {
         return cumulativeWithdrawn;
     }
 
-    public void setCumulativeWithdrawn(Double cumulativeWithdrawn) {
+    public void setCumulativeWithdrawn(BigDecimal cumulativeWithdrawn) {
         this.cumulativeWithdrawn = cumulativeWithdrawn;
     }
 
-    public Double getDailyDeposited() {
+    public BigDecimal getDailyDeposited() {
         return dailyDeposited;
     }
 
-    public void setDailyDeposited(Double dailyDeposited) {
+    public void setDailyDeposited(BigDecimal dailyDeposited) {
         this.dailyDeposited = dailyDeposited;
     }
 
-    public Double getDailyWithdrawn() {
+    public BigDecimal getDailyWithdrawn() {
         return dailyWithdrawn;
     }
 
-    public void setDailyWithdrawn(Double dailyWithdrawn) {
+    public void setDailyWithdrawn(BigDecimal dailyWithdrawn) {
         this.dailyWithdrawn = dailyWithdrawn;
     }
 

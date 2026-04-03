@@ -1,6 +1,7 @@
 package com.wakati.service;
 
 import com.wakati.I18NConstants;
+import com.wakati.constant.AppConstants;
 import com.wakati.entity.*;
 import com.wakati.enums.SecurityEventType;
 import com.wakati.enums.Status;
@@ -10,6 +11,7 @@ import com.wakati.model.request.LoginRequest;
 import com.wakati.repository.*;
 import com.wakati.util.RefreshTokenUtil;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -4,6 +4,7 @@ import com.wakati.enums.CommissionMode;
 import com.wakati.enums.Status;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -27,14 +28,14 @@ public class BulkTransferBatch extends BaseCreatedAtEntity{
 
     private Integer transactionCount;
 
-    private Double totalAmount;
+    private BigDecimal totalAmount;
 
     @Enumerated(EnumType.STRING)
     private CommissionMode commissionMode;
 
-    private Double commissionPercentage;
-    private Double totalCommission;
-    private Double totalDebit;
+    private BigDecimal commissionPercentage;
+    private BigDecimal totalCommission;
+    private BigDecimal totalDebit;
 
     private String description;
 
@@ -93,11 +94,11 @@ public class BulkTransferBatch extends BaseCreatedAtEntity{
         this.transactionCount = transactionCount;
     }
 
-    public Double getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Double totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -109,27 +110,27 @@ public class BulkTransferBatch extends BaseCreatedAtEntity{
         this.commissionMode = commissionMode;
     }
 
-    public Double getCommissionPercentage() {
+    public BigDecimal getCommissionPercentage() {
         return commissionPercentage;
     }
 
-    public void setCommissionPercentage(Double commissionPercentage) {
+    public void setCommissionPercentage(BigDecimal commissionPercentage) {
         this.commissionPercentage = commissionPercentage;
     }
 
-    public Double getTotalCommission() {
+    public BigDecimal getTotalCommission() {
         return totalCommission;
     }
 
-    public void setTotalCommission(Double totalCommission) {
+    public void setTotalCommission(BigDecimal totalCommission) {
         this.totalCommission = totalCommission;
     }
 
-    public Double getTotalDebit() {
+    public BigDecimal getTotalDebit() {
         return totalDebit;
     }
 
-    public void setTotalDebit(Double totalDebit) {
+    public void setTotalDebit(BigDecimal totalDebit) {
         this.totalDebit = totalDebit;
     }
 

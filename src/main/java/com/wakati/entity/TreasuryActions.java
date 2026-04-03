@@ -4,6 +4,7 @@ import com.wakati.enums.Status;
 import com.wakati.enums.TreasuryTxnType;
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +21,7 @@ public class TreasuryActions extends BaseUpdatedAtEntity{
     @Enumerated(EnumType.STRING)
     private TreasuryTxnType txnType;
 
-    private String amount;
+    private BigDecimal amount;
     private String referenceNo;
 
     @ManyToOne
@@ -70,11 +71,11 @@ public class TreasuryActions extends BaseUpdatedAtEntity{
         this.txnType = txnType;
     }
 
-    public String getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

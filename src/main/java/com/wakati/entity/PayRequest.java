@@ -2,6 +2,7 @@ package com.wakati.entity;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,7 +33,7 @@ public class PayRequest extends BaseUpdatedAtEntity {
 
     private String status;
 
-    private Double amountToPay;
+    private BigDecimal amountToPay;
 
     private LocalDateTime otpVerifiedAtReceiverToSd;
     private LocalDateTime otpVerifiedAtSdToDealer;
@@ -118,11 +119,11 @@ public class PayRequest extends BaseUpdatedAtEntity {
         this.status = status;
     }
 
-    public Double getAmountToPay() {
+    public BigDecimal getAmountToPay() {
         return amountToPay;
     }
 
-    public void setAmountToPay(Double amountToPay) {
+    public void setAmountToPay(BigDecimal amountToPay) {
         this.amountToPay = amountToPay;
     }
 
