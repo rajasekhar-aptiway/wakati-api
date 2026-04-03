@@ -65,6 +65,18 @@ public enum I18NConstants {
     DEPOSIT_ALREADY_EXISTS,
     INSUFFICIENT_BALANCE,
     COMMISSION_CONFIG_NOT_FOUND,
-    ACCESS_DENIED
+    ACCESS_DENIED,
+    INVALID_STATUS,
+    DISPUTE_NOT_FOUND,
+    DISPUTE_CLOSED,
+    INVALID_DISPUTE_ACTION,//Invalid action. Use: raise, list, update
+    MISSING_TXN_ID_AND_REASON,//txn_id and reason are required
+    TXN_NOT_FOUND,//Transaction not found or does not belong to you
+    DISPUTE_ALREADY_EXIST,
+
+    INVALID_DATE_FORMAT,//date must be YYYY-MM-DD
+    INVALID_LOG_LEVEL,
+    INVALID_LOG_ACTION,//"Invalid action. only dates or read accepted"
+    CFO_AND_ADMIN_REQUIRED,//Only ADMIN or CFO can perform this action
 
 }
