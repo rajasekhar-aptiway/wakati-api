@@ -53,7 +53,9 @@ INSERT INTO i18n_messages(message_key,language,message) VALUES ('USER_ID_AND_OTP
 ('LOGIN_SUCCESS','en','Login success'),
 
 ('ERROR_WHILE_SENDING_EMAIL','en','Error while sending email'),
+
 ('ERROR_WHILE_SENDING_SMS','en','Error while sending sms'),
+
 ('INVALID_REQUEST','en','Invalid request'),
 
 ('INVALID_CURRENT_PASSWORD','en','Invalid current password'),
@@ -63,7 +65,40 @@ INSERT INTO i18n_messages(message_key,language,message) VALUES ('USER_ID_AND_OTP
 ('PASSWORD_UPDATE_SUCCESS','en','Password updated successfully'),
 
 ('DOCUMENTS_UPLOADED_SUCCESSFULLY','en','Documents uploaded successfully'),
+
 ('DOCUMENT_UPLOAD_FAILED','en','Documents upload failed'),
+
 ('USER_ID_AND_PIN_REQUIRED','en','User ID and pin are required'),
-('PIN_SET_SUCCESSFULLY','en','Pin set successfully');
+
+('PIN_SET_SUCCESSFULLY','en','Pin set successfully'),
+
+
+
+('PROFILE_FETCH_SUCCESS','en','Profile fetched successfully'),
+('DASHBOARD_DATA_SUCCESS', 'en', 'Dashboard data retrieved successfully'),
+('INSUFFICIENT_WALLET_BALANCE', 'en', 'Insufficient wallet balance'),
+('WALLET_NOT_FOUND','en','Wallet not found'),
+('INVALID_TXN_TYPE','en','Invalid transaction type'),
+('SAME_ACCOUNT_NOT_ALLOWED','en','Same account not allowed'),
+('INVALID_AMOUNT','en', 'Invalid amount'),
+('INVALID_DEALER','en','Invalid dealer'),
+('DEPOSIT_ALREADY_EXISTS','en','Deposit already exists'),
+('INSUFFICIENT_BALANCE','en','Insufficient balance'),
+('COMMISSION_CONFIG_NOT_FOUND','en','Commission config not found'),
+('ACCESS_DENIED','en','Access denied'),
+('INVALID_STATUS','en','Invalid status'),
+('DISPUTE_NOT_FOUND','en','Dispute not found'),
+('DISPUTE_CLOSED','en','Dispute closed'),
+('INVALID_DISPUTE_ACTION','en','Invalid dispute action'),
+('MISSING_TXN_ID_AND_REASON','en','Missing transaction id and reason'),
+('TXN_NOT_FOUND','en','Transaction not found'),
+('DISPUTE_ALREADY_EXIST','en','Dispute already exists'),
+('INVALID_DATE_FORMAT','en','Invalid date format'),
+('INVALID_LOG_LEVEL','en','Invalid log level'),
+('INVALID_LOG_ACTION','en','Invalid log action'),
+('CFO_AND_ADMIN_REQUIRED','en','Cfo and admin required'),
+('MOBILE_NO_REQUIRED', 'en', 'Mobile number is required'),
+('DOCUMENT_ID_REQUIRED', 'en', 'Document ID is required'),
+('FILE_NOT_FOUND', 'en', 'File not found'),
+('DOCUMENT_NOT_FOUND', 'en', 'Document not found');
  
