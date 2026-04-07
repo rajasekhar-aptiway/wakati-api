@@ -15,6 +15,16 @@
 
     </changeSet>
 
+    <changeSet id="i18n-messages-002" author="rajasekhar">
+        <sqlFile
+                path="db/changelog/sql/i18n-messages-insert-french.sql"
+                relativeToChangelogFile="false"
+                splitStatements="true"
+                endDelimiter=";"
+                stripComments="true"/>
+
+    </changeSet>
+
     <changeSet id="regions-insert-001" author="rajasekhar" context="dev">
         <sqlFile
                 path="db/changelog/sql/regions-insert.sql"
