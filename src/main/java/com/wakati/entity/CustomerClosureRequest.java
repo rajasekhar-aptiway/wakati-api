@@ -23,7 +23,9 @@ public class CustomerClosureRequest extends BaseUpdatedAtEntity {
     private User requestedBy;
 
     private String requestedByType;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 
     private String remarks;
 
@@ -67,11 +69,11 @@ public class CustomerClosureRequest extends BaseUpdatedAtEntity {
         this.requestedByType = requestedByType;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

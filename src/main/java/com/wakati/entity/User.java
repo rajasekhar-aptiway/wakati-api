@@ -9,10 +9,11 @@ import java.util.List;
 @Table(name = "USERS")
 public class User extends BaseUpdatedAtEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Integer id;
 
+    @Id
     @Column(name = "user_id", unique = true, nullable = false)
     private String userId;
 
@@ -78,12 +79,12 @@ public class User extends BaseUpdatedAtEntity {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     private List<UserDocuments> documents;
 
-    public Integer getId() {
-        return id;
+    public String getId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.userId = id;
     }
 
     public String getUserId() {

@@ -1,5 +1,6 @@
 package com.wakati.repository;
 
+import com.wakati.entity.User;
 import com.wakati.entity.Wallet;
 import com.wakati.enums.AccountStatus;
 import com.wakati.enums.OwnerType;
@@ -20,6 +21,8 @@ public interface WalletRepository extends JpaRepository<Wallet, Integer> {
     Optional<Wallet> findByWalletId(String walletId);
 
     Optional<Wallet> findByOwnerId(String ownerId);
+
+    Optional<Wallet> findByOwner(User owner);
 
     Optional<Wallet> findByOwner_UserId(String ownerId);
 

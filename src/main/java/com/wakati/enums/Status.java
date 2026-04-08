@@ -8,5 +8,6 @@ public enum Status {
     DRAFT,
     CLOSURE_PENDING,
     BLOCKED,
-    SUSPENDED
+    SUSPENDED,
+    CLOSED
 }
